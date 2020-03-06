@@ -1,0 +1,30 @@
+---
+# Print to console:
+#   prefix: log
+#   body:
+#   - console.log('${1:content}');
+#   - this is another content ${1:content}
+#   - next log ${2:hello}
+#   description: Log output to console
+Main Funciton:
+  prefix: mn
+  body:
+  - MAIN
+  - "$0"
+  - END MAIN
+  description: Main Function
+Normal Funciton:
+  prefix: fn
+  body:
+  - FUNCTION
+  - "$0"
+  - END FUNCTION
+  description: Normal Function
+Prepare Statements:
+  prefix: pre
+  body:
+  - PREPARE ${1:statement} FORM ${2:sql}
+Execute Statments:
+  prefix: execute
+  body:
+  - EXECUTE ${1:statement}

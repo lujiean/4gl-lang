@@ -1,0 +1,12 @@
+#vscode
+.vscode
+vsc-extension-quickstart.md
+.vscodeignore
+
+#node
+node_modules
+
+#source
+snippets/*.json
+syntaxes/*.json
+themes

@@ -1,0 +1,47 @@
+{
+    "name": "4gl-lang",
+    "displayName": "4gl Lang",
+    "description": "extension for 4gl",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.42.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "4gl",
+                "aliases": [
+                    "4GL",
+                    "4gl"
+                ],
+                "extensions": [
+                    ".4gl"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "4gl",
+                "scopeName": "source.4gl",
+                "path": "./syntaxes/4gl.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "4gl",
+                "path": "./snippets/snippets.json"
+            }
+        ]
+    },
+    "devDependencies": {
+        "js-yaml": "^3.13.1"
+    },
+    "scripts": {
+        "compile": "node ./scripts/compile.js"
+    }
+}

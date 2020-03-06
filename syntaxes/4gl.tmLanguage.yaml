@@ -1,0 +1,50 @@
+---
+name: 4GL
+patterns:
+- include: "#keywords"
+- include: "#strings"
+- include: "#comments"
+- include: "#constants"
+- include: "#entities"
+repository:
+  keywords:
+    patterns:
+    - name: keyword.control.4gl
+      match: "\\b(?i)(if|while|for|return|define|function|end|let|call|returning|to|display)\\b"
+    - name: keyword.operator.4gl
+    # - name: storage.type.primitive.java
+      match: "(\\+|(\\b|\\s)-(\\b|\\s)|\\*|\\/|=)"
+  strings:
+    patterns:
+    - name: string.quoted.double.4gl
+      begin: "\""
+      end: "\""
+      patterns:
+      - name: constant.character.escape.4gl
+        match: "\\\\."
+    - name: string.quoted.single.4gl
+      begin: "'"
+      end: "'"
+      patterns:
+      - name: constant.character.escape.4gl
+        match: "\\\\."
+  comments:
+    patterns:
+    - name: comment.line.number-sign.4gl
+      match: "#.*"
+    - name: comment.line.double-dash.4gl
+      match: "-.*"
+    - name: comment.block.documentation.4gl
+      begin: "{"
+      end: "}"
+  constants:
+    patterns:
+    - name: constant.numberic.4gl
+      match: "\\b(\\d+\\.\\d+|\\d+)\\b"
+    - name: constant.language.4gl
+      match: "(?i)(true|false)"
+  entities:
+    patterns:
+    - name: entity.name.function.4gl
+      match: "function"
+scopeName: source.4gl

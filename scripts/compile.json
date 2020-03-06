@@ -1,0 +1,10 @@
+[
+    {
+        "srcfile": "./syntaxes/4gl.tmLanguage.yaml",
+        "tarfile": "./syntaxes/4gl.tmLanguage.json"
+    },
+    {
+        "srcfile": "./snippets/snippets.yaml",
+        "tarfile": "./snippets/snippets.json"
+    }
+]
