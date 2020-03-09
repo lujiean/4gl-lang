@@ -7,24 +7,39 @@
 #   - next log ${2:hello}
 #   description: Log output to console
 Main Funciton:
-  prefix: mn
+  prefix: main
   body:
   - MAIN
-  - "$0"
+  - ${0}
   - END MAIN
   description: Main Function
 Normal Funciton:
-  prefix: fn
+  prefix: function
   body:
   - FUNCTION
-  - "$0"
+  - ${0}
   - END FUNCTION
   description: Normal Function
 Prepare Statements:
-  prefix: pre
+  prefix: prepare
   body:
   - PREPARE ${1:statement} FORM ${2:sql}
+  description: Prepare statement from sql
 Execute Statments:
   prefix: execute
   body:
   - EXECUTE ${1:statement}
+  description: Execute statement
+Declare Cursor for sql Foreach:
+  prefix: declare
+  body:
+  - DECLARE CURSOR ${1:cursor} FOR
+  - SELECT ${2:selectdTableColumns}
+  - FROM ${3:table}
+  - WHERE ${4:colmn} = ${5:columnValues}
+  - ORDER BY ${4:column}
+  - 
+  - FOREACH ${1:cursor} INTO ${6:definedVars}
+  - ${0}
+  - END FOREACH
+  description: Declare cursor and foreach

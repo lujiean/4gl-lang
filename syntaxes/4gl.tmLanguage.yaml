@@ -10,7 +10,7 @@ repository:
   keywords:
     patterns:
     - name: keyword.control.4gl
-      match: "\\b(?i)(if|while|for|return|define|function|end|let|call|returning|to|display)\\b"
+      match: "\\b(?i)(if|while|for|end|)\\b"
     - name: keyword.operator.4gl
     # - name: storage.type.primitive.java
       match: "(\\+|(\\b|\\s)-(\\b|\\s)|\\*|\\/|=)"
@@ -44,7 +44,14 @@ repository:
     - name: constant.language.4gl
       match: "(?i)(true|false)"
   entities:
+    # reference meta.method.identifier.java
     patterns:
-    - name: entity.name.function.4gl
-      match: "function"
+    - name: meta.method.identifier.4gl
+      match: "(\\w+)\\s*(\\d+)"
+      captures:
+        '1':
+          name: support.type.property-name
+        '2':
+          name: comment.line.double-dash.4gl
+
 scopeName: source.4gl
