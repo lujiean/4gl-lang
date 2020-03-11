@@ -1,18 +1,62 @@
 ---
 name: 4GL
+scopeName: source.4gl
 patterns:
-- include: "#keywords"
-- include: "#strings"
-- include: "#comments"
-- include: "#constants"
-- include: "#entities"
+- include: "#4gl-comment"
+- include: "#4gl-main"
+- include: "#4gl-function"
+# - include: "#4gl-report"
+# - include: "#strings"
+# - include: "#comments"
+# - include: "#constants"
+# - include: "#entities"
 repository:
+  4gl-comment:
+    patterns:
+    - name: comment.line.number-sign.4gl
+      match: "#.*$"
+  4gl-main:
+    name: "meta.main.4gl"
+    begin: "(?i)^ *(main) *$"
+    beginCaptures:
+      '1':
+        name: storage.type.4gl
+    # end: "(?i)^\\s*(end)\\s*(main)\\s*$"
+    end: "(?i)^ *(end +main) *$"
+    endCaptures:
+      '1':
+        name: storage.type.4gl
+    patterns:
+    - include: "#keywords"
+  4gl-function:
+    name: "meta.funciton.4gl"
+    begin: "(?i)^ *(function) +(\\w+) *\\("
+    beginCaptures:
+      '1':
+        name: storage.type.4gl
+      '2':
+        name: entity.name.function.4gl
+    end: "(?i)^ *(end +function) *$"
+    endCaptures:
+      '1':
+        name: storage.type.4gl
+    patterns:
+    - include: "#keywords"
+    # match variables
+    - name: "variables.4gl"
+      begin: "\\A"
+      end: "\\)"
+      patterns:
+        - name: "variable.parameter.4gl"
+          match:  "\\w+"
+        - name: "punctuation.separator.delimiter.4gl"
+          match: ","
+    # old
   keywords:
     patterns:
     - name: keyword.control.4gl
-      match: "\\b(?i)(if|while|for|end|)\\b"
+      match: "\\b(?i)(if|while|for|end)\\b"
     - name: keyword.operator.4gl
-    # - name: storage.type.primitive.java
       match: "(\\+|(\\b|\\s)-(\\b|\\s)|\\*|\\/|=)"
   strings:
     patterns:
@@ -28,15 +72,7 @@ repository:
       patterns:
       - name: constant.character.escape.4gl
         match: "\\\\."
-  comments:
-    patterns:
-    - name: comment.line.number-sign.4gl
-      match: "#.*"
-    - name: comment.line.double-dash.4gl
-      match: "-.*"
-    - name: comment.block.documentation.4gl
-      begin: "{"
-      end: "}"
+
   constants:
     patterns:
     - name: constant.numberic.4gl
@@ -46,12 +82,10 @@ repository:
   entities:
     # reference meta.method.identifier.java
     patterns:
-    - name: meta.method.identifier.4gl
-      match: "(\\w+)\\s*(\\d+)"
+    - name: comment.line.number-sign
+      match: "(\\w+)\\s*(\\d+)\\("
       captures:
         '1':
           name: support.type.property-name
         '2':
           name: comment.line.double-dash.4gl
-
-scopeName: source.4gl

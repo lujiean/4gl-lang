@@ -16,8 +16,9 @@ Main Funciton:
 Normal Funciton:
   prefix: function
   body:
-  - FUNCTION
-  - ${0}
+  - FUNCTION ${1:functionName}(${2:inParams})
+  -     ${0}
+  -     RETURN ${3:returnParams}
   - END FUNCTION
   description: Normal Function
 Prepare Statements:
@@ -42,4 +43,12 @@ Declare Cursor for sql Foreach:
   - FOREACH ${1:cursor} INTO ${6:definedVars}
   - ${0}
   - END FOREACH
-  description: Declare cursor and foreach
+  description: Declare cursor foreach
+IF Statement:
+  prefix: if
+  body:
+  - IF (${1:expression}) THEN
+  - ${0}
+  - END IF
+  - 
+  description: IF Statementt
