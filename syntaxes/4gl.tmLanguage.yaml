@@ -30,7 +30,7 @@ repository:
     - include: "#keywords"
   4gl-function:
     name: "meta.funciton.4gl"
-    begin: "(?i)^ *(function) +(\\w+) *\\("
+    begin: "(?i)^ *(function) +(\\w+) *"
     beginCaptures:
       '1':
         name: storage.type.4gl
@@ -41,16 +41,23 @@ repository:
       '1':
         name: storage.type.4gl
     patterns:
-    - include: "#keywords"
     # match variables
     - name: "variables.4gl"
-      begin: "\\A"
+      begin: "\\("
       end: "\\)"
       patterns:
         - name: "variable.parameter.4gl"
           match:  "\\w+"
         - name: "punctuation.separator.delimiter.4gl"
           match: ","
+    - include: "#keywords"
+    - include: "#ifblock"
+  ifblock:
+    name: funciton.ifblock.4gl
+    begin: "(?i)^if[\\s\\S]*then$"
+    end: "(?i)^end *if$"
+
+    
     # old
   keywords:
     patterns:
