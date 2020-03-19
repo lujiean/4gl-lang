@@ -27,7 +27,7 @@ repository:
       '1':
         name: storage.type.4gl
     patterns:
-    - include: "#keywords"
+    - include: "#4gl-body"
   4gl-function:
     name: "meta.funciton.4gl"
     begin: "(?i)^ *(function) +(\\w+) *\\((.*)\\) *$"
@@ -50,14 +50,17 @@ repository:
       '1':
         name: storage.type.4gl
     patterns:
-    - include: "#keywords"
+    - include: "#4gl-body"
     # - include: "#ifblock"
-  ifblock:
-    name: funciton.ifblock.4gl
-    begin: "(?i)^ *if[\\s\\S]*then *$"
-    end: "(?i)^ *end +if *$"
-
-
+  # ifblock:
+  #   name: funciton.ifblock.4gl
+  #   begin: "(?i)^ *if[\\s\\S]*then *$"
+  #   end: "(?i)^ *end +if *$"
+  4gl-body:
+    patterns:
+    - include: "#keywords"
+    - include: "#strings"
+    - include: "#constants"
     # old
   keywords:
     patterns:
@@ -88,13 +91,13 @@ repository:
       match: "\\b(\\d+\\.\\d+|\\d+)\\b"
     - name: constant.language.4gl
       match: "(?i)(true|false)"
-  entities:
-    # reference meta.method.identifier.java
-    patterns:
-    - name: comment.line.number-sign
-      match: "(\\w+)\\s*(\\d+)\\("
-      captures:
-        '1':
-          name: support.type.property-name
-        '2':
-          name: comment.line.double-dash.4gl
+  # entities:
+  #   # reference meta.method.identifier.java
+  #   patterns:
+  #   - name: comment.line.number-sign
+  #     match: "(\\w+)\\s*(\\d+)\\("
+  #     captures:
+  #       '1':
+  #         name: support.type.property-name
+  #       '2':
+  #         name: comment.line.double-dash.4gl
