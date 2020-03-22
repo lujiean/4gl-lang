@@ -1,9 +1,11 @@
 {
     "comments": {
         // symbol used for single line comment. Remove this entry if your language does not support line comments
-        "lineComment": "//",
+        // "lineComment": "//",
+        "lineComment": "--",
         // symbols used for start and end a block comment. Remove this entry if your language does not support block comments
-        "blockComment": [ "/*", "*/" ]
+        // "blockComment": [ "/*", "*/" ]
+        "blockComment": [ "{", "}" ]
     },
     // symbols used as brackets
     "brackets": [
@@ -26,5 +28,17 @@
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"]
-    ]
+    ],
+    "folding": {
+        "markers": {
+          "start": "^\\s*function\\b",
+          "end": "^\\s*end function\\b"
+        }
+    },
+    "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)"
+        ,
+    "indentationRules": {
+        "increaseIndentPattern": "^\\s*(main|function|if.*then)\\s*$",
+        "decreaseIndentPattern": "^\\s*end\\s(main|function|if)\\s*$"
+    }
 }
