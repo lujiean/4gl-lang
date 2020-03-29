@@ -39,9 +39,18 @@
         ]
     },
     "devDependencies": {
-        "js-yaml": "^3.13.1"
+        "js-yaml": "^3.13.1",
+        "tslint": "^5.9.1",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.36"
     },
     "scripts": {
-        "compile": "node ./scripts/compile.js"
+        "compileyaml": "node ./scripts/compile.js",
+        "vscode:prepublish": "npm run compile",
+        "compile": "npm run lint && tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && mocha ./out/test/**/*.js",
+        "lint": "tslint -p tslint.json --fix"
     }
 }

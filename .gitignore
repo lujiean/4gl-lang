@@ -1,5 +1,5 @@
 #vscode
-.vscode
+# .vscode
 vsc-extension-quickstart.md
 .vscodeignore
 
@@ -10,3 +10,6 @@ node_modules
 snippets/*.json
 syntaxes/*.json
 themes
+
+#type script
+out
