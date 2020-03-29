@@ -10,6 +10,10 @@
         "Programming Languages",
         "Snippets"
     ],
+    "activationEvents": [
+        "onLanguage:xml"
+    ],
+    "main": "./out/extension",    
     "contributes": {
         "languages": [
             {
@@ -36,7 +40,23 @@
                 "language": "4gl",
                 "path": "./snippets/snippets.json"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "XML Tools Configuration",
+            "type": "object",
+            "properties": {
+                "xmlTools.xmlFormatterImplementation": {
+                    "type": "string",
+                    "enum": [
+                        "classic",
+                        "v2"
+                    ],
+                    "default": "v2",
+                    "description": "Supported XML Formatters: classic",
+                    "scope": "window"
+                }
+            }
+        }
     },
     "devDependencies": {
         "js-yaml": "^3.13.1",
