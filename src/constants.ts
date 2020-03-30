@@ -20,6 +20,7 @@ export namespace languageIds {
     export const xml = "xml";
     export const xsd = "xsd";
     export const xquery = "xquery";
+    export const fourgl = "4gl";
 }
 
 export namespace nativeCommands {

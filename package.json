@@ -11,9 +11,9 @@
         "Snippets"
     ],
     "activationEvents": [
-        "onLanguage:xml"
+        "onLanguage:4gl"
     ],
-    "main": "./out/extension",    
+    "main": "./out/extension",
     "contributes": {
         "languages": [
             {
@@ -65,9 +65,9 @@
         "vscode": "^1.1.36"
     },
     "scripts": {
-        "compileyaml": "node ./scripts/compile.js",
+        "cplyaml": "node ./scripts/compile.js",
         "vscode:prepublish": "npm run compile",
-        "compile": "npm run lint && tsc -p ./",
+        "compile": "npm run cplyaml && npm run lint && tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && mocha ./out/test/**/*.js",

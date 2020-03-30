@@ -19,7 +19,9 @@ import * as constants from "./constants";
 export function activate(context: ExtensionContext) {
     ExtensionState.configure(context);
 
-    const xmlXsdDocSelector = [...createDocumentSelector(constants.languageIds.xml), ...createDocumentSelector(constants.languageIds.xsd)];
+    // const xmlXsdDocSelector = [...createDocumentSelector(constants.languageIds.xml), ...createDocumentSelector(constants.languageIds.xsd)];
+    const xmlXsdDocSelector = [...createDocumentSelector(constants.languageIds.xml), ...createDocumentSelector(constants.languageIds.xsd),
+         ...createDocumentSelector(constants.languageIds.fourgl)];
     const xqueryDocSelector = createDocumentSelector(constants.languageIds.xquery);
 
     /* Completion Features */
@@ -36,7 +38,7 @@ export function activate(context: ExtensionContext) {
         commands.registerTextEditorCommand(constants.commands.textToXml, textToXml),
         commands.registerTextEditorCommand(constants.commands.minifyXml, minifyXml),
         languages.registerDocumentFormattingEditProvider(xmlXsdDocSelector, xmlFormattingEditProvider),
-        languages.registerDocumentRangeFormattingEditProvider(xmlXsdDocSelector, xmlFormattingEditProvider)
+        // languages.registerDocumentRangeFormattingEditProvider(xmlXsdDocSelector, xmlFormattingEditProvider)
     );
 
     /* Linting Features */
