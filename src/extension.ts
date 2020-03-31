@@ -6,7 +6,7 @@ import {
 import { createDocumentSelector, ExtensionState, Configuration } from "./common";
 // import { XQueryCompletionItemProvider } from "./completion";
 import { XmlFormatterFactory, XmlFormattingEditProvider } from "./formatting";
-import { formatAsXml, minifyXml, xmlToText, textToXml } from "./formatting/commands";
+// import { formatAsXml, minifyXml, xmlToText, textToXml } from "./formatting/commands";
 // import { XQueryLinter } from "./linting";
 // import { XmlTreeDataProvider } from "./tree-view";
 // import { evaluateXPath, getCurrentXPath } from "./xpath/commands";
@@ -22,7 +22,7 @@ export function activate(context: ExtensionContext) {
     // const xmlXsdDocSelector = [...createDocumentSelector(constants.languageIds.xml), ...createDocumentSelector(constants.languageIds.xsd)];
     const xmlXsdDocSelector = [...createDocumentSelector(constants.languageIds.xml), ...createDocumentSelector(constants.languageIds.xsd),
          ...createDocumentSelector(constants.languageIds.fourgl)];
-    const xqueryDocSelector = createDocumentSelector(constants.languageIds.xquery);
+    // const xqueryDocSelector = createDocumentSelector(constants.languageIds.xquery);
 
     /* Completion Features */
     // context.subscriptions.push(
@@ -33,10 +33,10 @@ export function activate(context: ExtensionContext) {
     const xmlFormattingEditProvider = new XmlFormattingEditProvider(XmlFormatterFactory.getXmlFormatter());
 
     context.subscriptions.push(
-        commands.registerTextEditorCommand(constants.commands.formatAsXml, formatAsXml),
-        commands.registerTextEditorCommand(constants.commands.xmlToText, xmlToText),
-        commands.registerTextEditorCommand(constants.commands.textToXml, textToXml),
-        commands.registerTextEditorCommand(constants.commands.minifyXml, minifyXml),
+        // commands.registerTextEditorCommand(constants.commands.formatAsXml, formatAsXml),
+        // commands.registerTextEditorCommand(constants.commands.xmlToText, xmlToText),
+        // commands.registerTextEditorCommand(constants.commands.textToXml, textToXml),
+        // commands.registerTextEditorCommand(constants.commands.minifyXml, minifyXml),
         languages.registerDocumentFormattingEditProvider(xmlXsdDocSelector, xmlFormattingEditProvider),
         // languages.registerDocumentRangeFormattingEditProvider(xmlXsdDocSelector, xmlFormattingEditProvider)
     );
