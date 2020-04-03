@@ -44,4 +44,5 @@ export namespace views {
 export namespace xmlFormatterImplementations {
     export const classic = "classic";
     export const v2 = "v2";
+    export const v3 = "v3";
 }

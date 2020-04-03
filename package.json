@@ -49,9 +49,10 @@
                     "type": "string",
                     "enum": [
                         "classic",
-                        "v2"
+                        "v2",
+                        "v3"
                     ],
-                    "default": "v2",
+                    "default": "v3",
                     "description": "Supported XML Formatters: classic",
                     "scope": "window"
                 }

@@ -4,12 +4,14 @@ import { Configuration, ExtensionState } from "../common";
 import * as constants from "../constants";
 import { ClassicXmlFormatter } from "./formatters/classic-xml-formatter";
 import { V2XmlFormatter } from "./formatters/v2-xml-formatter";
+import { V34glFormatter } from "./formatters/v3-4gl-formatter";
 
 import { XmlFormattingOptions } from "./xml-formatting-options";
 
+
 export interface XmlFormatter {
     formatXml(xml: string, options: XmlFormattingOptions): string;
-    minifyXml(xml: string, options: XmlFormattingOptions): string;
+    // minifyXml(xml: string, options: XmlFormattingOptions): string;
 }
 
 export class XmlFormatterFactory {
@@ -26,6 +28,9 @@ export class XmlFormatterFactory {
         switch (xmlFormatterImplementationSetting) {
             case constants.xmlFormatterImplementations.classic: xmlFormatterImplementation = new ClassicXmlFormatter(); break;
             case constants.xmlFormatterImplementations.v2:
+            case constants.xmlFormatterImplementations.v3:
+                xmlFormatterImplementation = new V34glFormatter();
+                break;
             default: xmlFormatterImplementation = new V2XmlFormatter(); break;
         }
 
