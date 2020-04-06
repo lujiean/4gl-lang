@@ -13,9 +13,9 @@ export class V34glFormatter implements XmlFormatter {
         console.debug("this is v3 4gl console format");
 
         const xarr: string[] = xml.split("\n");
-        const i = "";
+        // const i = "";
         // for (i in xarr) {
-        console.debug(xarr);
+        // console.debug(xarr);
         // }
 
         // let sentence: {
@@ -25,8 +25,9 @@ export class V34glFormatter implements XmlFormatter {
         //         { indentLevel: 0, content: 'hello' },
         //         { indentLevel: 1, content: 'world' }
         //     ];
+
         // save document to arrray
-        let sentence: {
+        const sentence: {
             indentLevel: number;
             content: string;
         }[] = [];
@@ -38,6 +39,10 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
         console.debug(sentence);
+
+        //foreach line, check its indentLevel and save
+        //round currentLine's checked indentLevel is for next line
+
 
         // combine output
         let output: string = undefined;
