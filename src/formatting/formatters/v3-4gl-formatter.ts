@@ -10,13 +10,49 @@ export class V34glFormatter implements XmlFormatter {
         // this replaces all "<" brackets inside of comments to a magical string
         // so the following minification steps don't mess with comment formatting
 
-        console.log("this is v3 4gl console format");
+        console.debug("this is v3 4gl console format");
 
-        const xarr: string[] = xml.split(' ');
-        var i:string = "";
-        for(i in xarr){
-            console.debug(i);
+        const xarr: string[] = xml.split("\n");
+        const i = "";
+        // for (i in xarr) {
+        console.debug(xarr);
+        // }
+
+        // let sentence: {
+        //     indentLevel: number;
+        //     content: string;
+        // }[] = [
+        //         { indentLevel: 0, content: 'hello' },
+        //         { indentLevel: 1, content: 'world' }
+        //     ];
+        // save document to arrray
+        let sentence: {
+            indentLevel: number;
+            content: string;
+        }[] = [];
+
+        for (const i in xarr) {
+            if (xarr.hasOwnProperty(i)) {
+                const element: string = xarr[i];
+                sentence.push({ indentLevel: 0, content: element.trim() });
+            }
         }
+        console.debug(sentence);
+
+        // combine output
+        let output: string = undefined;
+        for (let index = 0; index < sentence.length; index++) {
+            const element = sentence[index];
+            if (output == undefined) {
+                output = this._getIndent(options, element.indentLevel) + element.content;
+            } else {
+                output = output + options.newLine + this._getIndent(options, element.indentLevel) + element.content;
+            }
+        }
+
+        // const str = "this is a baby.";
+        // const n = str.match("/\\S+/");
+        // console.debug(n);
         // xml = this._sanitizeComments(xml);
 
         // remove whitespace from between tags, except for line breaks
@@ -35,7 +71,7 @@ export class V34glFormatter implements XmlFormatter {
         // the coast is clear - we can drop those "<" brackets back in
         // xml = this._unsanitizeComments(xml);
 
-        let output = "";
+        // const output = "";
 
         // let indentLevel = options.initialIndentLevel || 0;
         // let attributeQuote = "";
@@ -79,216 +115,216 @@ export class V34glFormatter implements XmlFormatter {
         //     const pc = xml.charAt(i - 1);
         //     const ppc = xml.charAt(i - 2);
 
-            // // entering CData
-            // if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "[") {
-            //     if (pc === ">" && ppc !== "/") {
-            //         output += "<";
-            //     }
+        // // entering CData
+        // if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "[") {
+        //     if (pc === ">" && ppc !== "/") {
+        //         output += "<";
+        //     }
 
-            //     else {
-            //         output += `${this._getIndent(options, indentLevel)}<`;
-            //     }
+        //     else {
+        //         output += `${this._getIndent(options, indentLevel)}<`;
+        //     }
 
-            //     setLocation(Location.CData);
-            // }
+        //     setLocation(Location.CData);
+        // }
 
-            // // exiting CData
-            // else if (isLocation(Location.CData) && cc === "]" && nc === "]" && nnc === ">") {
-            //     output += "]]>";
+        // // exiting CData
+        // else if (isLocation(Location.CData) && cc === "]" && nc === "]" && nnc === ">") {
+        //     output += "]]>";
 
-            //     i += 2;
+        //     i += 2;
 
-            //     setLocation(Location.Text);
-            // }
+        //     setLocation(Location.Text);
+        // }
 
-            // // entering Comment
-            // else if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "-") {
-            //     output += `${this._getIndent(options, indentLevel)}<`;
+        // // entering Comment
+        // else if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "-") {
+        //     output += `${this._getIndent(options, indentLevel)}<`;
 
-            //     setLocation(Location.Comment);
-            // }
+        //     setLocation(Location.Comment);
+        // }
 
-            // // exiting Comment
-            // else if (isLocation(Location.Comment) && cc === "-" && nc === "-" && nnc === ">") {
-            //     output += "-->";
+        // // exiting Comment
+        // else if (isLocation(Location.Comment) && cc === "-" && nc === "-" && nnc === ">") {
+        //     output += "-->";
 
-            //     i += 2;
+        //     i += 2;
 
-            //     setLocation(Location.Text);
-            // }
+        //     setLocation(Location.Text);
+        // }
 
-            // // entering SpecialTag
-            // else if (isLocation(Location.Text) && cc === "<" && (nc === "!" || nc === "?")) {
-            //     output += `${this._getIndent(options, indentLevel)}<`;
+        // // entering SpecialTag
+        // else if (isLocation(Location.Text) && cc === "<" && (nc === "!" || nc === "?")) {
+        //     output += `${this._getIndent(options, indentLevel)}<`;
 
-            //     setLocation(Location.SpecialTag);
-            // }
+        //     setLocation(Location.SpecialTag);
+        // }
 
-            // // exiting SpecialTag
-            // else if (isLocation(Location.SpecialTag) && cc === ">") {
-            //     output += `>`;
+        // // exiting SpecialTag
+        // else if (isLocation(Location.SpecialTag) && cc === ">") {
+        //     output += `>`;
 
-            //     setLocation(Location.Text);
-            // }
+        //     setLocation(Location.Text);
+        // }
 
-            // // entering StartTag.StartTagName
-            // else if (isLocation(Location.Text) && cc === "<" && ["/", "!"].indexOf(nc) === -1) {
-            //     refreshMixedContentFlag();
+        // // entering StartTag.StartTagName
+        // else if (isLocation(Location.Text) && cc === "<" && ["/", "!"].indexOf(nc) === -1) {
+        //     refreshMixedContentFlag();
 
-            //     // if this occurs after another tag, prepend a line break
-            //     // but do not add one if the previous tag was self-closing (it already adds its own)
-            //     if (pc === ">" && ppc !== "/" && !inMixedContent) {
-            //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
-            //     }
+        //     // if this occurs after another tag, prepend a line break
+        //     // but do not add one if the previous tag was self-closing (it already adds its own)
+        //     if (pc === ">" && ppc !== "/" && !inMixedContent) {
+        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
+        //     }
 
-            //     else if (!inMixedContent) {
-            //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
-            //         output = this._removeTrailingNonBreakingWhitespace(output);
-            //         output += `${this._getIndent(options, indentLevel)}<`;
-            //     }
+        //     else if (!inMixedContent) {
+        //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
+        //         output = this._removeTrailingNonBreakingWhitespace(output);
+        //         output += `${this._getIndent(options, indentLevel)}<`;
+        //     }
 
-            //     else {
-            //         output += "<";
+        //     else {
+        //         output += "<";
 
-            //         indentLevel--;
-            //     }
+        //         indentLevel--;
+        //     }
 
-            //     indentLevel++;
+        //     indentLevel++;
 
-            //     setLocation(Location.StartTagName);
-            // }
+        //     setLocation(Location.StartTagName);
+        // }
 
-            // // exiting StartTag.StartTagName, enter StartTag
-            // else if (isLocation(Location.StartTagName) && cc === " ") {
-            //     output += " ";
+        // // exiting StartTag.StartTagName, enter StartTag
+        // else if (isLocation(Location.StartTagName) && cc === " ") {
+        //     output += " ";
 
-            //     setLocation(Location.StartTag);
-            // }
+        //     setLocation(Location.StartTag);
+        // }
 
-            // // entering StartTag.Attribute
-            // else if (isLocation(Location.StartTag) && [" ", "/", ">"].indexOf(cc) === -1) {
-            //     if (locationHistory[locationHistory.length - 2] === Location.AttributeValue
-            //         && ((options.splitXmlnsOnFormat
-            //             && xml.substr(i, 5).toLowerCase() === "xmlns")
-            //             || options.splitAttributesOnFormat)) {
-            //         output += `${options.newLine}${this._getIndent(options, indentLevel)}`;
-            //     }
+        // // entering StartTag.Attribute
+        // else if (isLocation(Location.StartTag) && [" ", "/", ">"].indexOf(cc) === -1) {
+        //     if (locationHistory[locationHistory.length - 2] === Location.AttributeValue
+        //         && ((options.splitXmlnsOnFormat
+        //             && xml.substr(i, 5).toLowerCase() === "xmlns")
+        //             || options.splitAttributesOnFormat)) {
+        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}`;
+        //     }
 
-            //     output += cc;
+        //     output += cc;
 
-            //     setLocation(Location.Attribute);
-            // }
+        //     setLocation(Location.Attribute);
+        // }
 
-            // // entering StartTag.Attribute.AttributeValue
-            // else if (isLocation(Location.Attribute) && (cc === "\"" || cc === "'")) {
-            //     output += cc;
+        // // entering StartTag.Attribute.AttributeValue
+        // else if (isLocation(Location.Attribute) && (cc === "\"" || cc === "'")) {
+        //     output += cc;
 
-            //     setLocation(Location.AttributeValue);
+        //     setLocation(Location.AttributeValue);
 
-            //     attributeQuote = cc;
-            // }
+        //     attributeQuote = cc;
+        // }
 
-            // // exiting StartTag.Attribute.AttributeValue, entering StartTag
-            // else if (isLocation(Location.AttributeValue) && cc === attributeQuote) {
-            //     output += cc;
+        // // exiting StartTag.Attribute.AttributeValue, entering StartTag
+        // else if (isLocation(Location.AttributeValue) && cc === attributeQuote) {
+        //     output += cc;
 
-            //     setLocation(Location.StartTag);
+        //     setLocation(Location.StartTag);
 
-            //     attributeQuote = undefined;
-            // }
+        //     attributeQuote = undefined;
+        // }
 
-            // // approaching the end of a self-closing tag where there was no whitespace (issue #149)
-            // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName))
-            //     && cc === "/"
-            //     && pc !== " "
-            //     && options.enforcePrettySelfClosingTagOnFormat) {
-            //     output += " /";
-            // }
+        // // approaching the end of a self-closing tag where there was no whitespace (issue #149)
+        // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName))
+        //     && cc === "/"
+        //     && pc !== " "
+        //     && options.enforcePrettySelfClosingTagOnFormat) {
+        //     output += " /";
+        // }
 
-            // // exiting StartTag or StartTag.StartTagName, entering Text
-            // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName)) && cc === ">") {
-            //     // if this was a self-closing tag, we need to decrement the indent level and add a newLine
-            //     if (pc === "/") {
-            //         indentLevel--;
-            //         output += ">";
+        // // exiting StartTag or StartTag.StartTagName, entering Text
+        // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName)) && cc === ">") {
+        //     // if this was a self-closing tag, we need to decrement the indent level and add a newLine
+        //     if (pc === "/") {
+        //         indentLevel--;
+        //         output += ">";
 
-            //         // only add a newline here if one doesn't already exist (issue #147)
-            //         if (nc !== "\r" && nc !== "\n") {
-            //             output += options.newLine;
-            //         }
-            //     }
+        //         // only add a newline here if one doesn't already exist (issue #147)
+        //         if (nc !== "\r" && nc !== "\n") {
+        //             output += options.newLine;
+        //         }
+        //     }
 
-            //     else {
-            //         output += ">";
-            //     }
+        //     else {
+        //         output += ">";
+        //     }
 
-            //     // don't go directly from StartTagName to Text; go through StartTag first
-            //     if (isLocation(Location.StartTagName)) {
-            //         setLocation(Location.StartTag);
-            //     }
+        //     // don't go directly from StartTagName to Text; go through StartTag first
+        //     if (isLocation(Location.StartTagName)) {
+        //         setLocation(Location.StartTag);
+        //     }
 
-            //     setLocation(Location.Text);
-            // }
+        //     setLocation(Location.Text);
+        // }
 
-            // // entering EndTag
-            // else if (isLocation(Location.Text) && cc === "<" && nc === "/") {
-            //     if (!inMixedContent) {
-            //         indentLevel--;
-            //     }
+        // // entering EndTag
+        // else if (isLocation(Location.Text) && cc === "<" && nc === "/") {
+        //     if (!inMixedContent) {
+        //         indentLevel--;
+        //     }
 
-            //     refreshMixedContentFlag();
+        //     refreshMixedContentFlag();
 
-            //     // if the end tag immediately follows a line break, just add an indentation
-            //     // if the end tag immediately follows another end tag or a self-closing tag (issue #185), add a line break and indent
-            //     // otherwise, this should be treated as a same-line end tag(ex. <element>text</element>)
-            //     if ((pc === "\n" || lineBreakSpree) && !inMixedContent) {
-            //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
-            //         output = this._removeTrailingNonBreakingWhitespace(output);
-            //         output += `${this._getIndent(options, indentLevel)}<`;
-            //         lineBreakSpree = false;
-            //     }
+        //     // if the end tag immediately follows a line break, just add an indentation
+        //     // if the end tag immediately follows another end tag or a self-closing tag (issue #185), add a line break and indent
+        //     // otherwise, this should be treated as a same-line end tag(ex. <element>text</element>)
+        //     if ((pc === "\n" || lineBreakSpree) && !inMixedContent) {
+        //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
+        //         output = this._removeTrailingNonBreakingWhitespace(output);
+        //         output += `${this._getIndent(options, indentLevel)}<`;
+        //         lineBreakSpree = false;
+        //     }
 
-            //     else if (isLastNonTextLocation(Location.EndTag) && !inMixedContent) {
-            //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
-            //     }
+        //     else if (isLastNonTextLocation(Location.EndTag) && !inMixedContent) {
+        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
+        //     }
 
-            //     else if (pc === ">" && ppc === "/" && !inMixedContent) {
-            //         output += `${this._getIndent(options, indentLevel)}<`;
-            //     }
+        //     else if (pc === ">" && ppc === "/" && !inMixedContent) {
+        //         output += `${this._getIndent(options, indentLevel)}<`;
+        //     }
 
-            //     else {
-            //         output += "<";
-            //     }
+        //     else {
+        //         output += "<";
+        //     }
 
-            //     setLocation(Location.EndTag);
-            // }
+        //     setLocation(Location.EndTag);
+        // }
 
-            // // exiting EndTag, entering Text
-            // else if (isLocation(Location.EndTag) && cc === ">") {
-            //     output += ">";
+        // // exiting EndTag, entering Text
+        // else if (isLocation(Location.EndTag) && cc === ">") {
+        //     output += ">";
 
-            //     setLocation(Location.Text);
+        //     setLocation(Location.Text);
 
-            //     inMixedContent = false;
-            // }
+        //     inMixedContent = false;
+        // }
 
-            // // Text
-            // else {
-            //     if (cc === "\n") {
-            //         lineBreakSpree = true;
-            //         lastWordCharacter = undefined;
-            //     }
+        // // Text
+        // else {
+        //     if (cc === "\n") {
+        //         lineBreakSpree = true;
+        //         lastWordCharacter = undefined;
+        //     }
 
-            //     else if (lineBreakSpree && /\S/.test(cc)) {
-            //         lineBreakSpree = false;
-            //     }
+        //     else if (lineBreakSpree && /\S/.test(cc)) {
+        //         lineBreakSpree = false;
+        //     }
 
-            //     if (/[\w\d]/.test(cc)) {
-            //         lastWordCharacter = cc;
-            //     }
+        //     if (/[\w\d]/.test(cc)) {
+        //         lastWordCharacter = cc;
+        //     }
 
-            //     output += cc;
-            // }
+        //     output += cc;
+        // }
         // }
 
         return output;
@@ -298,9 +334,9 @@ export class V34glFormatter implements XmlFormatter {
     //     return new ClassicXmlFormatter().minifyXml(xml, options);
     // }
 
-    // private _getIndent(options: XmlFormattingOptions, indentLevel: number): string {
-    //     return ((options.editorOptions.insertSpaces) ? " ".repeat(options.editorOptions.tabSize) : "\t").repeat(indentLevel);
-    // }
+    private _getIndent(options: XmlFormattingOptions, indentLevel: number): string {
+        return ((options.editorOptions.insertSpaces) ? " ".repeat(options.editorOptions.tabSize) : "\t").repeat(indentLevel);
+    }
 
     // private _removeTrailingNonBreakingWhitespace(text: string): string {
     //     return text.replace(/[^\r\n\S]+$/, "");
