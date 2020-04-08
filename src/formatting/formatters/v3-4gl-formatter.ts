@@ -38,11 +38,33 @@ export class V34glFormatter implements XmlFormatter {
                 sentence.push({ indentLevel: 0, content: element.trim() });
             }
         }
-        console.debug(sentence);
 
         //foreach line, check its indentLevel and save
         //round currentLine's checked indentLevel is for next line
+        const re:RegExp = RegExp("\\W+");
+        for (let i = 0; i < sentence.length; i++) {
+            var curIndentLevel = sentence[i].indentLevel;
+            const lineArr = sentence[i].content.split(re);
 
+            for (let j = 0; j < lineArr.length; j++) {
+
+                //indentLevel++
+                if (lineArr[j].toUpperCase() == "MAIN") {
+                    curIndentLevel++;
+                }
+
+                //indentLevel--
+                if (lineArr[j].toUpperCase() == "END" && lineArr[j + 1].toUpperCase() == "MAIN") {
+                    curIndentLevel--;
+                    sentence[i].indentLevel = curIndentLevel;
+                    j++;
+                }
+            }
+            //assign next line indentLevel
+            if (i + 1 < sentence.length) {
+                sentence[i + 1].indentLevel = curIndentLevel
+            }
+        }
 
         // combine output
         let output: string = undefined;
@@ -388,14 +410,14 @@ export class V34glFormatter implements XmlFormatter {
     // }
 }
 
-// enum Location {
-//     Attribute,
-//     AttributeValue,
-//     CData,
-//     Comment,
-//     EndTag,
-//     SpecialTag,
-//     StartTag,
-//     StartTagName,
-//     Text
-// }
+enum Location {
+    Attribute,
+    AttributeValue,
+    CData,
+    Comment,
+    EndTag,
+    SpecialTag,
+    StartTag,
+    StartTagName,
+    Text
+}
