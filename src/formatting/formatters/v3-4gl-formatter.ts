@@ -28,8 +28,8 @@ export class V34glFormatter implements XmlFormatter {
 
         // save document to arrray
         const sentence: {
-            indentLevel: number;
-            content: string;
+            indentLevel: number,
+            content: string
         }[] = [];
 
         for (const i in xarr) {
@@ -39,26 +39,67 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
-        //foreach line, check its indentLevel and save
-        //round currentLine's checked indentLevel is for next line
-        const re:RegExp = RegExp("\\W+");
-        for (let i = 0; i < sentence.length; i++) {
-            var curIndentLevel = sentence[i].indentLevel;
-            const lineArr = sentence[i].content.split(re);
+        //next line indent level handle
+        let KeywordIndentMap = new Map();
+        KeywordIndentMap.set("MAIN", 1);
+        KeywordIndentMap.set("END MAIN", -1);
+        KeywordIndentMap.set("FUNCTION", 1);
+        KeywordIndentMap.set("END FUNCTION", -1);
+        KeywordIndentMap.set("IF", 1);
+        KeywordIndentMap.set("END IF", -1);
+        KeywordIndentMap.set("FOREACH", 1);
+        KeywordIndentMap.set("END FOREACH", -1);
+        KeywordIndentMap.set("ELSE", 1);
 
+        //cur line indent level handle
+        let CurrentLineIndentMap = new Map();
+        CurrentLineIndentMap.set("ELSE", -1);
+
+        //round currentLine's checked indentLevel is for next line
+        var key;
+        var re:RegExp;
+        var curIndentLevel:number;
+        var currentLine:string;
+        for (let i = 0; i < sentence.length; i++) {
+            curIndentLevel = sentence[i].indentLevel;
+            currentLine = sentence[i].content;
+
+            //replace line comment
+            re = RegExp("(#|--).*");
+            currentLine = currentLine.replace(re, "");
+
+            //replace "" '' content
+            re = RegExp("\".*?[^\\\\]\"", "g");
+            currentLine = currentLine.replace(re, "");
+            re = RegExp("'.*?[^\\\\]'", "g");
+            currentLine = currentLine.replace(re, "");
+
+            //check line char
+            re = RegExp("\\W+");
+            const lineArr = currentLine.split(re);
             for (let j = 0; j < lineArr.length; j++) {
 
                 //indentLevel++
-                if (lineArr[j].toUpperCase() == "MAIN") {
-                    curIndentLevel++;
+                // if (lineArr[j].toUpperCase() == "MAIN") {
+                key = lineArr[j].toUpperCase();
+                if (KeywordIndentMap.has(key)) {
+                    // curIndentLevel++;
+                    curIndentLevel = curIndentLevel + KeywordIndentMap.get(key);
                 }
 
                 //indentLevel--
-                if (lineArr[j].toUpperCase() == "END" && lineArr[j + 1].toUpperCase() == "MAIN") {
-                    curIndentLevel--;
-                    sentence[i].indentLevel = curIndentLevel;
-                    j++;
+                //double key
+                if (j + 1 < lineArr.length) {
+                    key = lineArr[j].toUpperCase() + " " + lineArr[j + 1].toUpperCase();
+                    // if (lineArr[j].toUpperCase() == "END" && lineArr[j + 1].toUpperCase() == "MAIN") {
+                    if (KeywordIndentMap.has(key)) {
+                        // curIndentLevel--;
+                        curIndentLevel = curIndentLevel + KeywordIndentMap.get(key);
+                        sentence[i].indentLevel = curIndentLevel;
+                        j++;
+                    }
                 }
+
             }
             //assign next line indentLevel
             if (i + 1 < sentence.length) {
@@ -410,14 +451,16 @@ export class V34glFormatter implements XmlFormatter {
     // }
 }
 
-enum Location {
-    Attribute,
-    AttributeValue,
-    CData,
-    Comment,
-    EndTag,
-    SpecialTag,
-    StartTag,
-    StartTagName,
-    Text
-}
+// const FKArr
+
+// enum Location {
+//     Attribute,
+//     AttributeValue,
+//     CData,
+//     Comment,
+//     EndTag,
+//     SpecialTag,
+//     StartTag,
+//     StartTagName,
+//     Text
+// }
