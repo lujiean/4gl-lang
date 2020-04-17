@@ -12,26 +12,13 @@ export class V34glFormatter implements XmlFormatter {
 
         console.debug("this is v3 4gl console format");
 
-        const xarr: string[] = xml.split("\n");
-        // const i = "";
-        // for (i in xarr) {
-        // console.debug(xarr);
-        // }
-
-        // let sentence: {
-        //     indentLevel: number;
-        //     content: string;
-        // }[] = [
-        //         { indentLevel: 0, content: 'hello' },
-        //         { indentLevel: 1, content: 'world' }
-        //     ];
-
         // save document to arrray
         const sentence: {
             indentLevel: number,
             content: string
         }[] = [];
 
+        const xarr: string[] = xml.split("\n");
         for (const i in xarr) {
             if (xarr.hasOwnProperty(i)) {
                 const element: string = xarr[i];
@@ -39,29 +26,35 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
-        //next line indent level handle
-        let KeywordIndentMap = new Map();
-        KeywordIndentMap.set("MAIN", 1);
-        KeywordIndentMap.set("END MAIN", -1);
-        KeywordIndentMap.set("FUNCTION", 1);
-        KeywordIndentMap.set("END FUNCTION", -1);
-        KeywordIndentMap.set("IF", 1);
-        KeywordIndentMap.set("END IF", -1);
-        KeywordIndentMap.set("FOREACH", 1);
-        KeywordIndentMap.set("END FOREACH", -1);
-        KeywordIndentMap.set("ELSE", 1);
-
         //cur line indent level handle
-        let CurrentLineIndentMap = new Map();
-        CurrentLineIndentMap.set("ELSE", -1);
+        let CurrentIndentMap = new Map();
+        CurrentIndentMap.set("END MAIN", -1);
+        CurrentIndentMap.set("END FUNCTION", -1);
+        // CurrentIndentMap.set("IF", 0);
+        CurrentIndentMap.set("ELSE", -1);
+        CurrentIndentMap.set("END IF", -1);
+        CurrentIndentMap.set("END FOREACH", -1);
+
+        //next line indent level handle
+        let NextIndentMap = new Map();
+        NextIndentMap.set("MAIN", 1);
+        NextIndentMap.set("END MAIN", -1);
+        NextIndentMap.set("FUNCTION", 1);
+        NextIndentMap.set("END FUNCTION", -1);
+        NextIndentMap.set("IF", 1);
+        // NextIndentMap.set("ELSE", 0);
+        NextIndentMap.set("END IF", -1);
+        NextIndentMap.set("FOREACH", 1);
+        NextIndentMap.set("END FOREACH", -1);
 
         //round currentLine's checked indentLevel is for next line
-        var key;
-        var re:RegExp;
-        var curIndentLevel:number;
-        var currentLine:string;
+        // var key;
+        var re: RegExp;
+        // var curIndentLevel: number;
+        var cIndentLv: number;
+        var nIndentLv: number;
+        var currentLine: string;
         for (let i = 0; i < sentence.length; i++) {
-            curIndentLevel = sentence[i].indentLevel;
             currentLine = sentence[i].content;
 
             //replace line comment
@@ -75,37 +68,72 @@ export class V34glFormatter implements XmlFormatter {
             currentLine = currentLine.replace(re, "");
 
             //check line char
+            cIndentLv = sentence[i].indentLevel;
+            nIndentLv = cIndentLv;
             re = RegExp("\\W+");
             const lineArr = currentLine.split(re);
-            for (let j = 0; j < lineArr.length; j++) {
+            for (let j = 0; j < lineArr.length;) {
 
-                //indentLevel++
-                // if (lineArr[j].toUpperCase() == "MAIN") {
-                key = lineArr[j].toUpperCase();
-                if (KeywordIndentMap.has(key)) {
-                    // curIndentLevel++;
-                    curIndentLevel = curIndentLevel + KeywordIndentMap.get(key);
-                }
+                var k: number;
+                for (k = 2; k > 0; k--) {
+                    //determin key
+                    let key = undefined;
+                    let bKeySet = false;
+                    switch (k) {
+                        // check if double key
+                        case 2:
+                            if (j + 1 < lineArr.length) {
+                                key = lineArr[j].toUpperCase() + " " + lineArr[j + 1].toUpperCase();
+                            }
+                            break;
+                        // check if single key
+                        case 1:
+                            key = lineArr[j].toUpperCase();
+                            break;
+                        default:
+                            break;
+                    }
 
-                //indentLevel--
-                //double key
-                if (j + 1 < lineArr.length) {
-                    key = lineArr[j].toUpperCase() + " " + lineArr[j + 1].toUpperCase();
-                    // if (lineArr[j].toUpperCase() == "END" && lineArr[j + 1].toUpperCase() == "MAIN") {
-                    if (KeywordIndentMap.has(key)) {
-                        // curIndentLevel--;
-                        curIndentLevel = curIndentLevel + KeywordIndentMap.get(key);
-                        sentence[i].indentLevel = curIndentLevel;
-                        j++;
+                    if (key != undefined) {
+
+                        if (j == 0) {
+                            //handle currentline indent and next line indent
+                            if (CurrentIndentMap.has(key)) {
+                                cIndentLv = cIndentLv + CurrentIndentMap.get(key);
+                                // j = j + k;
+                                // break;
+                                bKeySet = true;
+                            }
+                        }
+
+                        if (NextIndentMap.has(key)) {
+                            nIndentLv = nIndentLv + NextIndentMap.get(key);
+                            // j = j + k;
+                            // break;
+                            bKeySet = true;
+                        }
+
+                        if (bKeySet) {
+                            break;
+                        }
                     }
                 }
 
+                if (k <= 0) {
+                    j++;
+                } else {
+                    j = j + k;
+                }
             }
-            //assign next line indentLevel
+
+            //curline Indent
+            sentence[i].indentLevel = cIndentLv;
+            //next line indent
             if (i + 1 < sentence.length) {
-                sentence[i + 1].indentLevel = curIndentLevel
+                sentence[i + 1].indentLevel = nIndentLv
             }
         }
+        // console.debug(sentence);
 
         // combine output
         let output: string = undefined;
@@ -118,283 +146,6 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
-        // const str = "this is a baby.";
-        // const n = str.match("/\\S+/");
-        // console.debug(n);
-        // xml = this._sanitizeComments(xml);
-
-        // remove whitespace from between tags, except for line breaks
-        // xml = xml.replace(/>\s{0,}</g, (match: string) => {
-        //     return match.replace(/[^\S\r\n]/g, "");
-        // });
-
-        // do some light minification to get rid of insignificant whitespace
-        // xml = xml.replace(/"\s+(?=[^\s]+=)/g, "\" "); // spaces between attributes
-        // xml = xml.replace(/"\s+(?=>)/g, "\""); // spaces between the last attribute and tag close (>)
-        // xml = xml.replace(/"\s+(?=\/>)/g, "\" "); // spaces between the last attribute and tag close (/>)
-        // xml = xml.replace(/(?!<!\[CDATA\[)[^ <>="]\s+[^ <>="]+=(?![^<]*?\]\]>)/g, (match: string) => { // spaces between the node name and the first attribute
-        //     return match.replace(/\s+/g, " ");
-        // });
-
-        // the coast is clear - we can drop those "<" brackets back in
-        // xml = this._unsanitizeComments(xml);
-
-        // const output = "";
-
-        // let indentLevel = options.initialIndentLevel || 0;
-        // let attributeQuote = "";
-        // let lineBreakSpree = false;
-        // let lastWordCharacter: string | undefined;
-        // let inMixedContent = false;
-
-        // const locationHistory: Location[] = [Location.Text];
-
-        // function isLastNonTextLocation(loc: Location): boolean {
-        //     for (let i = (locationHistory.length - 1); i >= 0; i--) {
-        //         if (locationHistory[i] !== Location.Text) {
-        //             return (loc === locationHistory[i]);
-        //         }
-        //     }
-
-        //     return false;
-        // }
-
-        // function isLocation(loc: Location): boolean {
-        //     return loc === locationHistory[locationHistory.length - 1];
-        // }
-
-        // function refreshMixedContentFlag(): void {
-        //     inMixedContent = (isLastNonTextLocation(Location.StartTag) || isLastNonTextLocation(Location.EndTag)) && lastWordCharacter !== undefined;
-        // }
-
-        // function setLocation(loc: Location): void {
-        //     if (loc === Location.Text) {
-        //         lastWordCharacter = undefined;
-        //     }
-
-        //     locationHistory.push(loc);
-        // }
-
-        // NOTE: all "exiting" checks should appear after their associated "entering" checks
-        // for (let i = 0; i < xml.length; i++) {
-        //     const cc = xml[i];
-        //     const nc = xml.charAt(i + 1);
-        //     const nnc = xml.charAt(i + 2);
-        //     const pc = xml.charAt(i - 1);
-        //     const ppc = xml.charAt(i - 2);
-
-        // // entering CData
-        // if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "[") {
-        //     if (pc === ">" && ppc !== "/") {
-        //         output += "<";
-        //     }
-
-        //     else {
-        //         output += `${this._getIndent(options, indentLevel)}<`;
-        //     }
-
-        //     setLocation(Location.CData);
-        // }
-
-        // // exiting CData
-        // else if (isLocation(Location.CData) && cc === "]" && nc === "]" && nnc === ">") {
-        //     output += "]]>";
-
-        //     i += 2;
-
-        //     setLocation(Location.Text);
-        // }
-
-        // // entering Comment
-        // else if (isLocation(Location.Text) && cc === "<" && nc === "!" && nnc === "-") {
-        //     output += `${this._getIndent(options, indentLevel)}<`;
-
-        //     setLocation(Location.Comment);
-        // }
-
-        // // exiting Comment
-        // else if (isLocation(Location.Comment) && cc === "-" && nc === "-" && nnc === ">") {
-        //     output += "-->";
-
-        //     i += 2;
-
-        //     setLocation(Location.Text);
-        // }
-
-        // // entering SpecialTag
-        // else if (isLocation(Location.Text) && cc === "<" && (nc === "!" || nc === "?")) {
-        //     output += `${this._getIndent(options, indentLevel)}<`;
-
-        //     setLocation(Location.SpecialTag);
-        // }
-
-        // // exiting SpecialTag
-        // else if (isLocation(Location.SpecialTag) && cc === ">") {
-        //     output += `>`;
-
-        //     setLocation(Location.Text);
-        // }
-
-        // // entering StartTag.StartTagName
-        // else if (isLocation(Location.Text) && cc === "<" && ["/", "!"].indexOf(nc) === -1) {
-        //     refreshMixedContentFlag();
-
-        //     // if this occurs after another tag, prepend a line break
-        //     // but do not add one if the previous tag was self-closing (it already adds its own)
-        //     if (pc === ">" && ppc !== "/" && !inMixedContent) {
-        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
-        //     }
-
-        //     else if (!inMixedContent) {
-        //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
-        //         output = this._removeTrailingNonBreakingWhitespace(output);
-        //         output += `${this._getIndent(options, indentLevel)}<`;
-        //     }
-
-        //     else {
-        //         output += "<";
-
-        //         indentLevel--;
-        //     }
-
-        //     indentLevel++;
-
-        //     setLocation(Location.StartTagName);
-        // }
-
-        // // exiting StartTag.StartTagName, enter StartTag
-        // else if (isLocation(Location.StartTagName) && cc === " ") {
-        //     output += " ";
-
-        //     setLocation(Location.StartTag);
-        // }
-
-        // // entering StartTag.Attribute
-        // else if (isLocation(Location.StartTag) && [" ", "/", ">"].indexOf(cc) === -1) {
-        //     if (locationHistory[locationHistory.length - 2] === Location.AttributeValue
-        //         && ((options.splitXmlnsOnFormat
-        //             && xml.substr(i, 5).toLowerCase() === "xmlns")
-        //             || options.splitAttributesOnFormat)) {
-        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}`;
-        //     }
-
-        //     output += cc;
-
-        //     setLocation(Location.Attribute);
-        // }
-
-        // // entering StartTag.Attribute.AttributeValue
-        // else if (isLocation(Location.Attribute) && (cc === "\"" || cc === "'")) {
-        //     output += cc;
-
-        //     setLocation(Location.AttributeValue);
-
-        //     attributeQuote = cc;
-        // }
-
-        // // exiting StartTag.Attribute.AttributeValue, entering StartTag
-        // else if (isLocation(Location.AttributeValue) && cc === attributeQuote) {
-        //     output += cc;
-
-        //     setLocation(Location.StartTag);
-
-        //     attributeQuote = undefined;
-        // }
-
-        // // approaching the end of a self-closing tag where there was no whitespace (issue #149)
-        // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName))
-        //     && cc === "/"
-        //     && pc !== " "
-        //     && options.enforcePrettySelfClosingTagOnFormat) {
-        //     output += " /";
-        // }
-
-        // // exiting StartTag or StartTag.StartTagName, entering Text
-        // else if ((isLocation(Location.StartTag) || isLocation(Location.StartTagName)) && cc === ">") {
-        //     // if this was a self-closing tag, we need to decrement the indent level and add a newLine
-        //     if (pc === "/") {
-        //         indentLevel--;
-        //         output += ">";
-
-        //         // only add a newline here if one doesn't already exist (issue #147)
-        //         if (nc !== "\r" && nc !== "\n") {
-        //             output += options.newLine;
-        //         }
-        //     }
-
-        //     else {
-        //         output += ">";
-        //     }
-
-        //     // don't go directly from StartTagName to Text; go through StartTag first
-        //     if (isLocation(Location.StartTagName)) {
-        //         setLocation(Location.StartTag);
-        //     }
-
-        //     setLocation(Location.Text);
-        // }
-
-        // // entering EndTag
-        // else if (isLocation(Location.Text) && cc === "<" && nc === "/") {
-        //     if (!inMixedContent) {
-        //         indentLevel--;
-        //     }
-
-        //     refreshMixedContentFlag();
-
-        //     // if the end tag immediately follows a line break, just add an indentation
-        //     // if the end tag immediately follows another end tag or a self-closing tag (issue #185), add a line break and indent
-        //     // otherwise, this should be treated as a same-line end tag(ex. <element>text</element>)
-        //     if ((pc === "\n" || lineBreakSpree) && !inMixedContent) {
-        //         // removing trailing non-breaking whitespace here prevents endless indentations (issue #193)
-        //         output = this._removeTrailingNonBreakingWhitespace(output);
-        //         output += `${this._getIndent(options, indentLevel)}<`;
-        //         lineBreakSpree = false;
-        //     }
-
-        //     else if (isLastNonTextLocation(Location.EndTag) && !inMixedContent) {
-        //         output += `${options.newLine}${this._getIndent(options, indentLevel)}<`;
-        //     }
-
-        //     else if (pc === ">" && ppc === "/" && !inMixedContent) {
-        //         output += `${this._getIndent(options, indentLevel)}<`;
-        //     }
-
-        //     else {
-        //         output += "<";
-        //     }
-
-        //     setLocation(Location.EndTag);
-        // }
-
-        // // exiting EndTag, entering Text
-        // else if (isLocation(Location.EndTag) && cc === ">") {
-        //     output += ">";
-
-        //     setLocation(Location.Text);
-
-        //     inMixedContent = false;
-        // }
-
-        // // Text
-        // else {
-        //     if (cc === "\n") {
-        //         lineBreakSpree = true;
-        //         lastWordCharacter = undefined;
-        //     }
-
-        //     else if (lineBreakSpree && /\S/.test(cc)) {
-        //         lineBreakSpree = false;
-        //     }
-
-        //     if (/[\w\d]/.test(cc)) {
-        //         lastWordCharacter = cc;
-        //     }
-
-        //     output += cc;
-        // }
-        // }
-
         return output;
     }
 
@@ -404,6 +155,10 @@ export class V34glFormatter implements XmlFormatter {
 
     private _getIndent(options: XmlFormattingOptions, indentLevel: number): string {
         return ((options.editorOptions.insertSpaces) ? " ".repeat(options.editorOptions.tabSize) : "\t").repeat(indentLevel);
+    }
+
+    private _defineIndentLvl(key: String, indentLevel: number): number {
+        return 0;
     }
 
     // private _removeTrailingNonBreakingWhitespace(text: string): string {
