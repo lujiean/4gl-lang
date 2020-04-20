@@ -51,4 +51,15 @@ IF Statement:
   - ${0}
   - END IF
   - 
-  description: IF Statementt
+  description: IF Statement
+CASE Statement:
+  prefix: case
+  body:
+  - CASE ${1:variable}
+  -     WHEN ${2:valueN}
+  -         ${3:expression}
+  -     OTHERWISE
+  -         ${4:expression}
+  - END CASE
+  - 
+  description: CASE Statement
