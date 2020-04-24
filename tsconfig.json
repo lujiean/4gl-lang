@@ -10,7 +10,9 @@
         "sourceMap": true,
         "rootDir": "src",
         "strict": true,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "exclude": [
         "node_modules",

@@ -4,6 +4,8 @@ import { ClassicXmlFormatter } from "./classic-xml-formatter";
 
 const MagicalStringOfWonders = "~::~MAAAGIC~::~";
 
+import data from "./config/v3-keys.json";
+
 /* tslint:disable no-use-before-declare */
 export class V34glFormatter implements XmlFormatter {
     formatXml(xml: string, options: XmlFormattingOptions): string {
@@ -11,6 +13,8 @@ export class V34glFormatter implements XmlFormatter {
         // so the following minification steps don't mess with comment formatting
 
         // console.debug("this is v3 4gl console format");
+
+        console.debug(<any>data);
 
         // save document to arrray
         const sentence: {

@@ -1,0 +1,22 @@
+{
+    "CurrentIndentMap": [
+        {
+            "key": "END MAIN",
+            "value": -1
+        },
+        {
+            "key": "END FUNCTION",
+            "value": -1
+        }
+    ],
+    "NextIndentMap": [
+        {
+            "key": "MAIN",
+            "value": 1
+        },
+        {
+            "key": "END MAIN",
+            "value": -1
+        }
+    ]
+}
