@@ -28,73 +28,36 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
+        // line indent handle
         let keyJO = <any>data;
-        console.debug(keyJO);
+        // console.debug(keyJO);
 
-        //cur line indent level handle
-        let CurrentIndentMap = new Map<String,number>();
+        // cur line indent level handle
+        let CurrentIndentMap = new Map<String, number>();
         for (let i = 0; i < keyJO.CurrentIndentMap.length; i++) {
             CurrentIndentMap.set(keyJO.CurrentIndentMap[i].key, keyJO.CurrentIndentMap[i].value)
         }
 
-        // CurrentIndentMap.set("END MAIN", -1);
-        // CurrentIndentMap.set("END FUNCTION", -1);
-        // // CurrentIndentMap.set("IF", 0);
-        // CurrentIndentMap.set("ELSE", -1);
-        // CurrentIndentMap.set("END IF", -1);
-        // CurrentIndentMap.set("END FOREACH", -1);
-        // CurrentIndentMap.set("WHEN", -1);
-        // CurrentIndentMap.set("OTHERWISE", -1);
-        // CurrentIndentMap.set("END CASE", -2);
-
-        //next line indent level handle
-        let NextIndentMap = new Map<String,number>();
+        // next line indent level handle
+        let NextIndentMap = new Map<String, number>();
         for (let i = 0; i < keyJO.NextIndentMap.length; i++) {
             NextIndentMap.set(keyJO.NextIndentMap[i].key, keyJO.NextIndentMap[i].value)
         }
 
-        // NextIndentMap.set("MAIN", 1);
-        // NextIndentMap.set("END MAIN", -1);
-        // NextIndentMap.set("FUNCTION", 1);
-        // NextIndentMap.set("END FUNCTION", -1);
-        // NextIndentMap.set("IF", 1);
-        // // NextIndentMap.set("ELSE", 0);
-        // NextIndentMap.set("END IF", -1);
-        // NextIndentMap.set("FOREACH", 1);
-        // NextIndentMap.set("END FOREACH", -1);
-        // NextIndentMap.set("CASE", 2);
-        // NextIndentMap.set("END CASE", -2);
-
-        //round currentLine's checked indentLevel is for next line
-        // var key;
-        var re: RegExp;
-        // var curIndentLevel: number;
-        var cIndentLv: number;
-        var nIndentLv: number;
-        var currentLine: string;
+        // round currentLine's checked indentLevel is for next line
         for (let i = 0; i < sentence.length; i++) {
-            currentLine = sentence[i].content;
+            // check line char
+            let currentLine = this._sanitizeLine(sentence[i].content);
+            let cIndentLv = sentence[i].indentLevel;
+            let nIndentLv = cIndentLv;
 
-            //replace line comment
-            re = RegExp("(#|--).*");
-            currentLine = currentLine.replace(re, "");
-
-            //replace "" '' content
-            re = RegExp("\".*?[^\\\\]\"", "g");
-            currentLine = currentLine.replace(re, "");
-            re = RegExp("'.*?[^\\\\]'", "g");
-            currentLine = currentLine.replace(re, "");
-
-            //check line char
-            cIndentLv = sentence[i].indentLevel;
-            nIndentLv = cIndentLv;
-            re = RegExp("\\W+");
+            let re = RegExp("\\W+");
             const lineArr = currentLine.split(re);
             for (let j = 0; j < lineArr.length;) {
 
-                var k: number;
+                let k: number;
                 for (k = 2; k > 0; k--) {
-                    //determin key
+                    // determin key
                     let key = undefined;
                     let bKeySet = false;
                     switch (k) {
@@ -115,7 +78,7 @@ export class V34glFormatter implements XmlFormatter {
                     if (key != undefined) {
 
                         if (j == 0) {
-                            //handle currentline indent and next line indent
+                            // handle currentline indent and next line indent
                             if (CurrentIndentMap.has(key)) {
                                 cIndentLv = cIndentLv + CurrentIndentMap.get(key);
                                 // j = j + k;
@@ -175,8 +138,20 @@ export class V34glFormatter implements XmlFormatter {
         return ((options.editorOptions.insertSpaces) ? " ".repeat(options.editorOptions.tabSize) : "\t").repeat(indentLevel);
     }
 
-    private _defineIndentLvl(key: String, indentLevel: number): number {
-        return 0;
+    private _sanitizeLine(str: string): string {
+        let outStr: string = str;
+
+        let re: RegExp;
+        // replace line comment
+        re = RegExp("(#|--).*");
+        outStr = outStr.replace(re, "");
+
+        // replace "" '' content
+        re = RegExp("\".*?[^\\\\]\"", "g");
+        outStr = outStr.replace(re, "");
+        re = RegExp("'.*?[^\\\\]'", "g");
+        outStr = outStr.replace(re, "");
+        return outStr;
     }
 
     // private _removeTrailingNonBreakingWhitespace(text: string): string {
@@ -223,17 +198,3 @@ export class V34glFormatter implements XmlFormatter {
     //     return xml.replace(new RegExp(MagicalStringOfWonders, "g"), "<");
     // }
 }
-
-// const FKArr
-
-// enum Location {
-//     Attribute,
-//     AttributeValue,
-//     CData,
-//     Comment,
-//     EndTag,
-//     SpecialTag,
-//     StartTag,
-//     StartTagName,
-//     Text
-// }
