@@ -14,8 +14,6 @@ export class V34glFormatter implements XmlFormatter {
 
         // console.debug("this is v3 4gl console format");
 
-        console.debug(<any>data);
-
         // save document to arrray
         const sentence: {
             indentLevel: number,
@@ -30,31 +28,42 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
+        let keyJO = <any>data;
+        console.debug(keyJO);
+
         //cur line indent level handle
-        let CurrentIndentMap = new Map();
-        CurrentIndentMap.set("END MAIN", -1);
-        CurrentIndentMap.set("END FUNCTION", -1);
-        // CurrentIndentMap.set("IF", 0);
-        CurrentIndentMap.set("ELSE", -1);
-        CurrentIndentMap.set("END IF", -1);
-        CurrentIndentMap.set("END FOREACH", -1);
-        CurrentIndentMap.set("WHEN", -1);
-        CurrentIndentMap.set("OTHERWISE", -1);
-        CurrentIndentMap.set("END CASE", -2);
+        let CurrentIndentMap = new Map<String,number>();
+        for (let i = 0; i < keyJO.CurrentIndentMap.length; i++) {
+            CurrentIndentMap.set(keyJO.CurrentIndentMap[i].key, keyJO.CurrentIndentMap[i].value)
+        }
+
+        // CurrentIndentMap.set("END MAIN", -1);
+        // CurrentIndentMap.set("END FUNCTION", -1);
+        // // CurrentIndentMap.set("IF", 0);
+        // CurrentIndentMap.set("ELSE", -1);
+        // CurrentIndentMap.set("END IF", -1);
+        // CurrentIndentMap.set("END FOREACH", -1);
+        // CurrentIndentMap.set("WHEN", -1);
+        // CurrentIndentMap.set("OTHERWISE", -1);
+        // CurrentIndentMap.set("END CASE", -2);
 
         //next line indent level handle
-        let NextIndentMap = new Map();
-        NextIndentMap.set("MAIN", 1);
-        NextIndentMap.set("END MAIN", -1);
-        NextIndentMap.set("FUNCTION", 1);
-        NextIndentMap.set("END FUNCTION", -1);
-        NextIndentMap.set("IF", 1);
-        // NextIndentMap.set("ELSE", 0);
-        NextIndentMap.set("END IF", -1);
-        NextIndentMap.set("FOREACH", 1);
-        NextIndentMap.set("END FOREACH", -1);
-        NextIndentMap.set("CASE", 2);
-        NextIndentMap.set("END CASE", -2);
+        let NextIndentMap = new Map<String,number>();
+        for (let i = 0; i < keyJO.NextIndentMap.length; i++) {
+            NextIndentMap.set(keyJO.NextIndentMap[i].key, keyJO.NextIndentMap[i].value)
+        }
+
+        // NextIndentMap.set("MAIN", 1);
+        // NextIndentMap.set("END MAIN", -1);
+        // NextIndentMap.set("FUNCTION", 1);
+        // NextIndentMap.set("END FUNCTION", -1);
+        // NextIndentMap.set("IF", 1);
+        // // NextIndentMap.set("ELSE", 0);
+        // NextIndentMap.set("END IF", -1);
+        // NextIndentMap.set("FOREACH", 1);
+        // NextIndentMap.set("END FOREACH", -1);
+        // NextIndentMap.set("CASE", 2);
+        // NextIndentMap.set("END CASE", -2);
 
         //round currentLine's checked indentLevel is for next line
         // var key;

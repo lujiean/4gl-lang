@@ -7,6 +7,30 @@
         {
             "key": "END FUNCTION",
             "value": -1
+        },
+        {
+            "key": "ELSE",
+            "value": -1
+        },
+        {
+            "key": "END IF",
+            "value": -1
+        },
+        {
+            "key": "END FOREACH",
+            "value": -1
+        },
+        {
+            "key": "WHEN",
+            "value": -1
+        },
+        {
+            "key": "OTHERWISE",
+            "value": -1
+        },
+        {
+            "key": "END CASE",
+            "value": -2
         }
     ],
     "NextIndentMap": [
@@ -17,6 +41,38 @@
         {
             "key": "END MAIN",
             "value": -1
+        },
+        {
+            "key": "FUNCTION",
+            "value": 1
+        },
+        {
+            "key": "END FUNCTION",
+            "value": -1
+        },
+        {
+            "key": "IF",
+            "value": 1
+        },
+        {
+            "key": "END IF",
+            "value": -1
+        },
+        {
+            "key": "FOREACH",
+            "value": 1
+        },
+        {
+            "key": "END FOREACH",
+            "value": -1
+        },
+        {
+            "key": "CASE",
+            "value": 2
+        },
+        {
+            "key": "END CASE",
+            "value": -2
         }
     ]
 }
