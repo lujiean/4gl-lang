@@ -2,77 +2,120 @@
     "CurrentIndentMap": [
         {
             "key": "END MAIN",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "END FUNCTION",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "ELSE",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "END IF",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "END FOREACH",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "WHEN",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "OTHERWISE",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "END CASE",
-            "value": -2
+            "value": -2,
+            "reflag": false
+        },
+        {
+            "key": "END FOR",
+            "value": -1,
+            "reflag": false
+        },
+        {
+            "key": "DECLARE \\w+ CURSOR FOR",
+            "value": 0,
+            "reflag": true
         }
     ],
     "NextIndentMap": [
         {
             "key": "MAIN",
-            "value": 1
+            "value": 1,
+            "reflag": false
         },
         {
             "key": "END MAIN",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "FUNCTION",
-            "value": 1
+            "value": 1,
+            "reflag": false
         },
         {
             "key": "END FUNCTION",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "IF",
-            "value": 1
+            "value": 1,
+            "reflag": false
         },
         {
             "key": "END IF",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "FOREACH",
-            "value": 1
+            "value": 1,
+            "reflag": false
         },
         {
             "key": "END FOREACH",
-            "value": -1
+            "value": -1,
+            "reflag": false
         },
         {
             "key": "CASE",
-            "value": 2
+            "value": 2,
+            "reflag": false
         },
         {
             "key": "END CASE",
-            "value": -2
+            "value": -2,
+            "reflag": false
+        },
+        {
+            "key": "FOR",
+            "value": 1,
+            "reflag": false
+        },
+        {
+            "key": "END FOR",
+            "value": -1,
+            "reflag": false
+        },
+        {
+            "key": "DECLARE \\w+ CURSOR FOR",
+            "value": 0,
+            "reflag": true
         }
     ]
 }

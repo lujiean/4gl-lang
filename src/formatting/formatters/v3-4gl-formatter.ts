@@ -30,19 +30,6 @@ export class V34glFormatter implements XmlFormatter {
 
         // line indent handle
         let keyJO = <any>data;
-        // console.debug(keyJO);
-
-        // cur line indent level handle
-        let CurrentIndentMap = new Map<String, number>();
-        for (let i = 0; i < keyJO.CurrentIndentMap.length; i++) {
-            CurrentIndentMap.set(keyJO.CurrentIndentMap[i].key, keyJO.CurrentIndentMap[i].value)
-        }
-
-        // next line indent level handle
-        let NextIndentMap = new Map<String, number>();
-        for (let i = 0; i < keyJO.NextIndentMap.length; i++) {
-            NextIndentMap.set(keyJO.NextIndentMap[i].key, keyJO.NextIndentMap[i].value)
-        }
 
         // round currentLine's checked indentLevel is for next line
         for (let i = 0; i < sentence.length; i++) {
@@ -54,43 +41,39 @@ export class V34glFormatter implements XmlFormatter {
             let re = RegExp("\\W+");
             const lineArr = currentLine.split(re);
             for (let j = 0; j < lineArr.length;) {
-
-                let k: number;
-                for (k = 2; k > 0; k--) {
+                
+                // key check length
+                let k: number = 4;
+                if (j + k >= lineArr.length) {
+                    k = lineArr.length - j;
+                }
+                // for (k = 2; k > 0; k--) {
+                for (; k > 0; k--) {
                     // determin key
-                    let key = undefined;
+                    let key:string = undefined;
                     let bKeySet = false;
-                    switch (k) {
-                        // check if double key
-                        case 2:
-                            if (j + 1 < lineArr.length) {
-                                key = lineArr[j].toUpperCase() + " " + lineArr[j + 1].toUpperCase();
-                            }
-                            break;
-                        // check if single key
-                        case 1:
-                            key = lineArr[j].toUpperCase();
-                            break;
-                        default:
-                            break;
+                    for (let index = 0; index < k; index++) {
+                        if (index == 0) {
+                            key = lineArr[j + index].toUpperCase();
+                        } else {
+                            key = key + ' ' + lineArr[j + index].toUpperCase();
+                        }
                     }
 
                     if (key != undefined) {
 
                         if (j == 0) {
                             // handle currentline indent and next line indent
-                            if (CurrentIndentMap.has(key)) {
-                                cIndentLv = cIndentLv + CurrentIndentMap.get(key);
-                                // j = j + k;
-                                // break;
+                            let keyCheck = this._hasKey(keyJO.CurrentIndentMap, key);
+                            if (keyCheck.hasKey) {
+                                cIndentLv = cIndentLv + keyCheck.indent;
                                 bKeySet = true;
                             }
                         }
 
-                        if (NextIndentMap.has(key)) {
-                            nIndentLv = nIndentLv + NextIndentMap.get(key);
-                            // j = j + k;
-                            // break;
+                        let keyCheck = this._hasKey(keyJO.NextIndentMap, key);
+                        if (keyCheck.hasKey) {
+                            nIndentLv = nIndentLv + keyCheck.indent;
                             bKeySet = true;
                         }
 
@@ -114,7 +97,7 @@ export class V34glFormatter implements XmlFormatter {
                 sentence[i + 1].indentLevel = nIndentLv
             }
         }
-        // console.debug(sentence);
+        // console.log(sentence);
 
         // combine output
         let output: string = undefined;
@@ -152,6 +135,34 @@ export class V34glFormatter implements XmlFormatter {
         re = RegExp("'.*?[^\\\\]'", "g");
         outStr = outStr.replace(re, "");
         return outStr;
+    }
+
+    private _hasKey(inArry: { key: string, value: number, reflag: boolean }[], inKeyStr: string): { hasKey: boolean, key: string, indent: number } {
+        let outHasKey: boolean = false;
+        let outKey: string = "";
+        let outIndent: number = 0;
+
+        for (let i = 0; i < inArry.length; i++) {
+            if (inArry[i].reflag) {
+                let re: RegExp = new RegExp(inArry[i].key);
+                if (re.test(inKeyStr)) {
+                    outHasKey = true;
+                    outIndent = inArry[i].value;
+                    outKey = inArry[i].key;
+                    break;
+                }
+            } else {
+                if (inKeyStr == inArry[i].key) {
+                    outHasKey = true;
+                    outIndent = inArry[i].value;
+                    outKey = inArry[i].key;
+                    break;
+                }
+            }
+
+        }
+
+        return { "hasKey": outHasKey, "key": outKey, "indent": outIndent };
     }
 
     // private _removeTrailingNonBreakingWhitespace(text: string): string {
