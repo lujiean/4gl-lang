@@ -17,14 +17,15 @@ export class V34glFormatter implements XmlFormatter {
         // save document to arrray
         const sentence: {
             indentLevel: number,
-            content: string
+            content: string,
+            sanitizeLine: string
         }[] = [];
 
         const xarr: string[] = xml.split("\n");
         for (const i in xarr) {
             if (xarr.hasOwnProperty(i)) {
                 const element: string = xarr[i];
-                sentence.push({ indentLevel: 0, content: element.trim() });
+                sentence.push({ indentLevel: 0, content: element.trim(), sanitizeLine: this._sanitizeLine(element).trim() });
             }
         }
 
@@ -34,7 +35,8 @@ export class V34glFormatter implements XmlFormatter {
         // round currentLine's checked indentLevel is for next line
         for (let i = 0; i < sentence.length; i++) {
             // check line char
-            let currentLine = this._sanitizeLine(sentence[i].content);
+            // let currentLine = this._sanitizeLine(sentence[i].content);
+            let currentLine = this._sanitizeLine(sentence[i].sanitizeLine);
             let cIndentLv = sentence[i].indentLevel;
             let nIndentLv = cIndentLv;
 
