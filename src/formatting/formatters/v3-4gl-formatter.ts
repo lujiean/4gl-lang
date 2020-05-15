@@ -13,6 +13,8 @@ export class V34glFormatter implements XmlFormatter {
         // so the following minification steps don't mess with comment formatting
 
         // console.debug("this is v3 4gl console format");
+        // console.debug(xml);
+        // console.debug(xml.replace(new RegExp('{[\\s\\S]+}'),''));
 
         // save document to arrray
         const sentence: {
@@ -21,6 +23,7 @@ export class V34glFormatter implements XmlFormatter {
             sanitizeLine: string
         }[] = [];
 
+        // replace line skip content
         const xarr: string[] = xml.split("\n");
         for (const i in xarr) {
             if (xarr.hasOwnProperty(i)) {
@@ -29,10 +32,43 @@ export class V34glFormatter implements XmlFormatter {
             }
         }
 
+        //replace block skip content
+        let BracketCnt:number = 0;
+        const LReBracket:RegExp = new RegExp("{.*");
+        const RReBracket:RegExp = new RegExp(".*}");
+        for (let index = 0; index < sentence.length; index++) {
+            let bLBracket:boolean = false;
+            let bRBracket:boolean = false;
+            if(LReBracket.test(sentence[index].sanitizeLine)){
+                bLBracket = true;
+            }
+
+            if(RReBracket.test(sentence[index].sanitizeLine)){
+                bRBracket = true;
+            }
+
+            if (bLBracket) {
+                BracketCnt++;
+            }
+            if (BracketCnt > 0) {
+                if (bLBracket || bRBracket) {
+                    if (bLBracket) {
+                        sentence[index].sanitizeLine = sentence[index].sanitizeLine.replace(LReBracket,"");
+                    } else {
+                        sentence[index].sanitizeLine = sentence[index].sanitizeLine.replace(RReBracket,"");
+                    }
+                } else {
+                    sentence[index].sanitizeLine = "";
+                }
+            }
+            if (bRBracket) {
+                BracketCnt--;
+            }
+            
+        }
+
         // line indent handle
         let keyJO = <any>data;
-
-        // round currentLine's checked indentLevel is for next line
         for (let i = 0; i < sentence.length; i++) {
             // check line char
             // let currentLine = this._sanitizeLine(sentence[i].content);
@@ -45,7 +81,7 @@ export class V34glFormatter implements XmlFormatter {
             for (let j = 0; j < lineArr.length;) {
                 
                 // key check length
-                let k: number = 4;
+                let k: number = keyJO.MaxKeyLength;
                 if (j + k >= lineArr.length) {
                     k = lineArr.length - j;
                 }
@@ -135,6 +171,10 @@ export class V34glFormatter implements XmlFormatter {
         re = RegExp("\".*?[^\\\\]\"", "g");
         outStr = outStr.replace(re, "");
         re = RegExp("'.*?[^\\\\]'", "g");
+        outStr = outStr.replace(re, "");
+
+        // replace {}
+        re = RegExp("{.*}", "g");
         outStr = outStr.replace(re, "");
         return outStr;
     }

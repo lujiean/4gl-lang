@@ -1,0 +1,103 @@
+---
+name: 4GL
+scopeName: source.4gl
+patterns:
+- include: "#4gl-comment"
+- include: "#4gl-main"
+- include: "#4gl-function"
+# - include: "#4gl-report"
+# - include: "#strings"
+# - include: "#comments"
+# - include: "#constants"
+# - include: "#entities"
+repository:
+  4gl-comment:
+    patterns:
+    - name: comment.line.number-sign.4gl
+      match: "#.*$"
+  4gl-main:
+    name: "meta.main.4gl"
+    begin: "(?i)^ *(main) *$"
+    beginCaptures:
+      '1':
+        name: storage.type.4gl
+    # end: "(?i)^\\s*(end)\\s*(main)\\s*$"
+    end: "(?i)^ *(end +main) *$"
+    endCaptures:
+      '1':
+        name: storage.type.4gl
+    patterns:
+    - include: "#4gl-body"
+  4gl-function:
+    name: "meta.funciton.4gl"
+    begin: "(?i)^ *(function) +(\\w+) *\\((.*)\\) *$"
+    beginCaptures:
+      '1':
+      #funciton keyword
+        name: storage.type.4gl
+      '2':
+      #function name
+        name: entity.name.function.4gl
+      '3':
+      #function parameters
+        patterns:
+          - name: "variable.parameter.4gl"
+            match:  "\\w+"
+          - name: "punctuation.separator.delimiter.4gl"
+            match: ","
+    end: "(?i)^ *(end +function) *$"
+    endCaptures:
+      '1':
+        name: storage.type.4gl
+    patterns:
+    - include: "#4gl-body"
+    # - include: "#ifblock"
+  # ifblock:
+  #   name: funciton.ifblock.4gl
+  #   begin: "(?i)^ *if[\\s\\S]*then *$"
+  #   end: "(?i)^ *end +if *$"
+  4gl-body:
+    patterns:
+    - include: "#keywords"
+    - include: "#strings"
+    - include: "#constants"
+    # old
+  keywords:
+    patterns:
+    - name: keyword.control.4gl
+      match: "\\b(?i)(if|while|for|end|then)\\b"
+    - name: keyword.operator.4gl
+      match: "(\\+|(\\b|\\s)-(\\b|\\s)|\\*|\\/|=)"
+    - name: storage.type.4gl
+      match: "(?i)\\b(return)\\b"
+  strings:
+    patterns:
+    - name: string.quoted.double.4gl
+      begin: "\""
+      end: "\""
+      patterns:
+      - name: constant.character.escape.4gl
+        match: "\\\\."
+    - name: string.quoted.single.4gl
+      begin: "'"
+      end: "'"
+      patterns:
+      - name: constant.character.escape.4gl
+        match: "\\\\."
+
+  constants:
+    patterns:
+    - name: constant.numberic.4gl
+      match: "\\b(\\d+\\.\\d+|\\d+)\\b"
+    - name: constant.language.4gl
+      match: "(?i)(true|false)"
+  # entities:
+  #   # reference meta.method.identifier.java
+  #   patterns:
+  #   - name: comment.line.number-sign
+  #     match: "(\\w+)\\s*(\\d+)\\("
+  #     captures:
+  #       '1':
+  #         name: support.type.property-name
+  #       '2':
+  #         name: comment.line.double-dash.4gl

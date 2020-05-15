@@ -1,103 +1,139 @@
 ---
 name: 4GL
 scopeName: source.4gl
+comment: Modified from the original ASP bundle. Originally modified by Thomas Aylott
+  subtleGradient.com
 patterns:
-- include: "#4gl-comment"
-- include: "#4gl-main"
-- include: "#4gl-function"
-# - include: "#4gl-report"
-# - include: "#strings"
-# - include: "#comments"
-# - include: "#constants"
-# - include: "#entities"
+- match: "\\n"
+  name: meta.ending-space
+- include: "#round-brackets"
+# - begin: "^(?=\\t)"
+#   end: "(?=[^\\t])"
+#   name: meta.leading-space
+#   patterns:
+#   - captures:
+#       '1':
+#         name: meta.odd-tab.tabs
+#       '2':
+#         name: meta.even-tab.tabs
+#     match: "(\\t)(\\t)?"
+# - begin: "^(?= )"
+#   end: "(?=[^ ])"
+#   name: meta.leading-space
+#   patterns:
+#   - captures:
+#       '1':
+#         name: meta.odd-tab.spaces
+#       '2':
+#         name: meta.even-tab.spaces
+#     match: "(  )(  )?"
+- captures:
+    '1':
+      name: storage.type.function.4gl
+    '2':
+      name: entity.name.function.4gl
+    '3':
+      name: punctuation.definition.parameters.4gl
+    '4':
+      name: variable.parameter.function.4gl
+    '5':
+      name: punctuation.definition.parameters.4gl
+  match: "^\\s*((?i:function|sub))\\s*([a-zA-Z_]\\w*)\\s*(\\()([^)]*)(\\)).*\\n?"
+  name: meta.function.4gl
+- begin: "(^[ \\t]+)?(?=#)"
+  beginCaptures:
+    '1':
+      name: punctuation.whitespace.comment.leading.4gl
+  end: "(?!\\G)"
+  patterns:
+  - begin: "#"
+    beginCaptures:
+      '0':
+        name: punctuation.definition.comment.4gl
+    end: "\\n"
+    name: comment.line.apostrophe.4gl
+- begin: "{"
+  end: "}"
+  name: comment.block.4gl
+- match: "(?i:\\b(If|Then|Else|ElseIf|Else If|End If|While|Wend|For|To|Each|Case|Select|End
+    Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit
+    Property|Exit Sub|IIf|When|Otherwise)\\b)"
+  name: keyword.control.4gl
+- match: "(?i:\\b(Mod|And|Not|Or|Xor|as)\\b)"
+  name: keyword.operator.4gl
+# - captures:
+#     '1':
+#       name: storage.type.4gl
+#     '2':
+#       name: variable.other.bfeac.4gl
+#     '3':
+#       name: meta.separator.comma.4gl
+#   match: "(?i:(dim)\\s*(?:(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b)\\s*(,?)))"
+#   name: variable.other.dim.4gl
+- match: "(?i:\\s*\\b(Call|Class|Const|Dim|Redim|Function|Sub|Private Sub|Public Sub|End
+    Sub|End Function|End Class|End Property|Public Property|Private Property|Set|Let|Get|New|Randomize|Option
+    Explicit|On Error Resume Next|On Error GoTo)\\b\\s*)"
+  name: storage.type.4gl
+# - match: "(?i:\\b(Private|Public|Default)\\b)"
+#   name: storage.modifier.4gl
+- match: "(?i:\\s*\\b(Empty|False|Nothing|Null|True)\\b)"
+  name: constant.language.4gl
+- begin: "\""
+  beginCaptures:
+    '0':
+      name: punctuation.definition.string.begin.4gl
+  end: "\""
+  endCaptures:
+    '0':
+      name: punctuation.definition.string.end.4gl
+  name: string.quoted.double.4gl
+  patterns:
+  - match: '""'
+    name: constant.character.escape.apostrophe.4gl
+# - captures:
+#     '1':
+#       name: punctuation.definition.variable.4gl
+  # match: "(\\$)[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b\\s*"
+  # name: variable.other.4gl
+- match: "(?i:\\b(Application|ObjectContext|Request|Response|Server|Session)\\b)"
+  name: support.class.4gl
+- match: "(?i:\\b(Contents|StaticObjects|ClientCertificate|Cookies|Form|QueryString|ServerVariables)\\b)"
+  name: support.class.collection.4gl
+- match: "(?i:\\b(TotalBytes|Buffer|CacheControl|Charset|ContentType|Expires|ExpiresAbsolute|IsClientConnected|PICS|Status|ScriptTimeout|CodePage|LCID|SessionID|Timeout)\\b)"
+  name: support.constant.4gl
+- match: "(?i:\\b(Lock|Unlock|SetAbort|SetComplete|BinaryRead|AddHeader|AppendToLog|BinaryWrite|Clear|End|Flush|Redirect|Write|CreateObject|HTMLEncode|MapPath|URLEncode|Abandon|Convert|Regex)\\b)"
+  name: support.function.4gl
+- match: "(?i:\\b(Application_OnEnd|Application_OnStart|OnTransactionAbort|OnTransactionCommit|Session_OnEnd|Session_OnStart)\\b)"
+  name: support.function.event.4gl
+# - match: "(?i:(?<=as )(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b))"
+#   name: support.type.vb.4gl
+- match: "(?i:\\b(Array|Add|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exists|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Item|Items|Join|Keys|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Remove|RemoveAll|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\b)"
+  name: support.function.vb.4gl
+- match: "-?\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"
+  name: constant.numeric.4gl
+# - match: "(?i:\\b(vbtrue|vbfalse|vbcr|vbcrlf|vbformfeed|vblf|vbnewline|vbnullchar|vbnullstring|int32|vbtab|vbverticaltab|vbbinarycompare|vbtextcomparevbsunday|vbmonday|vbtuesday|vbwednesday|vbthursday|vbfriday|vbsaturday|vbusesystemdayofweek|vbfirstjan1|vbfirstfourdays|vbfirstfullweek|vbgeneraldate|vblongdate|vbshortdate|vblongtime|vbshorttime|vbobjecterror|vbEmpty|vbNull|vbInteger|vbLong|vbSingle|vbDouble|vbCurrency|vbDate|vbString|vbObject|vbError|vbBoolean|vbVariant|vbDataObject|vbDecimal|vbByte|vbArray)\\b)"
+#   name: support.type.vb.4gl
+- match: "(?i:\\b(char|varchar|decimal|integer|smallint|date)\\b)"
+  name: support.type.vb.4gl
+# - captures:
+#     '1':
+#       name: entity.name.function.4gl
+#   match: "(?i:(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b)(?=\\(\\)?))"
+#   name: support.function.4gl
+# - match: "(?i:((?<=(\\+|=|-|\\&|\\\\|/|<|>|\\(|,))\\s*\\b([a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?)\\b(?!(\\(|\\.))|\\b([a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?)\\b(?=\\s*(\\+|=|-|\\&|\\\\|/|<|>|\\(|\\)))))"
+#   name: variable.other.4gl
+- match: "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|/=|%=|\\+=|\\-=|&=|\\^=|\\b(in|instanceof|new|delete|typeof|void)\\b"
+  name: keyword.operator.js
 repository:
-  4gl-comment:
-    patterns:
-    - name: comment.line.number-sign.4gl
-      match: "#.*$"
-  4gl-main:
-    name: "meta.main.4gl"
-    begin: "(?i)^ *(main) *$"
+  round-brackets:
+    begin: "\\("
     beginCaptures:
-      '1':
-        name: storage.type.4gl
-    # end: "(?i)^\\s*(end)\\s*(main)\\s*$"
-    end: "(?i)^ *(end +main) *$"
+      '0':
+        name: punctuation.section.round-brackets.begin.4gl
+    end: "\\)"
     endCaptures:
-      '1':
-        name: storage.type.4gl
+      '0':
+        name: punctuation.section.round-brackets.end.4gl
+    name: meta.round-brackets
     patterns:
-    - include: "#4gl-body"
-  4gl-function:
-    name: "meta.funciton.4gl"
-    begin: "(?i)^ *(function) +(\\w+) *\\((.*)\\) *$"
-    beginCaptures:
-      '1':
-      #funciton keyword
-        name: storage.type.4gl
-      '2':
-      #function name
-        name: entity.name.function.4gl
-      '3':
-      #function parameters
-        patterns:
-          - name: "variable.parameter.4gl"
-            match:  "\\w+"
-          - name: "punctuation.separator.delimiter.4gl"
-            match: ","
-    end: "(?i)^ *(end +function) *$"
-    endCaptures:
-      '1':
-        name: storage.type.4gl
-    patterns:
-    - include: "#4gl-body"
-    # - include: "#ifblock"
-  # ifblock:
-  #   name: funciton.ifblock.4gl
-  #   begin: "(?i)^ *if[\\s\\S]*then *$"
-  #   end: "(?i)^ *end +if *$"
-  4gl-body:
-    patterns:
-    - include: "#keywords"
-    - include: "#strings"
-    - include: "#constants"
-    # old
-  keywords:
-    patterns:
-    - name: keyword.control.4gl
-      match: "\\b(?i)(if|while|for|end|then)\\b"
-    - name: keyword.operator.4gl
-      match: "(\\+|(\\b|\\s)-(\\b|\\s)|\\*|\\/|=)"
-    - name: storage.type.4gl
-      match: "(?i)\\b(return)\\b"
-  strings:
-    patterns:
-    - name: string.quoted.double.4gl
-      begin: "\""
-      end: "\""
-      patterns:
-      - name: constant.character.escape.4gl
-        match: "\\\\."
-    - name: string.quoted.single.4gl
-      begin: "'"
-      end: "'"
-      patterns:
-      - name: constant.character.escape.4gl
-        match: "\\\\."
-
-  constants:
-    patterns:
-    - name: constant.numberic.4gl
-      match: "\\b(\\d+\\.\\d+|\\d+)\\b"
-    - name: constant.language.4gl
-      match: "(?i)(true|false)"
-  # entities:
-  #   # reference meta.method.identifier.java
-  #   patterns:
-  #   - name: comment.line.number-sign
-  #     match: "(\\w+)\\s*(\\d+)\\("
-  #     captures:
-  #       '1':
-  #         name: support.type.property-name
-  #       '2':
-  #         name: comment.line.double-dash.4gl
+    - include: source.4gl
