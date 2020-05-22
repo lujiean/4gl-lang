@@ -24,7 +24,7 @@ Normal Funciton:
 Prepare Statements:
   prefix: prepare
   body:
-  - PREPARE ${1:statement} FORM ${2:sql}
+  - PREPARE ${1:statement} FROM ${2:sql}
   description: Prepare statement from sql
 Execute Statments:
   prefix: execute
@@ -34,13 +34,13 @@ Execute Statments:
 Declare Cursor for sql Foreach:
   prefix: declare
   body:
-  - DECLARE CURSOR ${1:cursor} FOR
-  - SELECT ${2:selectdTableColumns}
+  - DECLARE ${1:cursor_name} CURSOR FOR
+  - SELECT ${2:columns}
   - FROM ${3:table}
   - WHERE ${4:colmn} = ${5:columnValues}
   - ORDER BY ${4:column}
   - 
-  - FOREACH ${1:cursor} INTO ${6:definedVars}
+  - FOREACH ${1:cursorName} INTO ${6:definedVars}
   - ${0}
   - END FOREACH
   description: Declare cursor foreach

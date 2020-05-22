@@ -55,10 +55,12 @@ patterns:
 - begin: "{"
   end: "}"
   name: comment.block.4gl
-- match: "(?i:\\b(If|Then|Else|ElseIf|Else If|End If|While|Wend|For|To|Each|Select|End
-    Select|Return|Continue|Do|Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit
-    Property|Exit Sub|IIf|When|Otherwise|case|end case)\\b)"
+- match: "(?i:\\b(If|Then|Else|ElseIf|Else If|End If|While|Wend|For|To|Each|Continue|Do
+    |Until|Loop|Next|With|Exit Do|Exit For|Exit Function|Exit
+    Property|Exit Sub|IIf|When|Otherwise|end for|into)\\b)"
   name: keyword.control.4gl
+- match: "(?i:\\b(SELECT|FROM|WHERE|ORDER BY|insert into|values|rollback work|commit work|begin work|update|set)\\b)"
+  name: constant.character.escape.database.4gl
 - match: "(?i:\\b(Mod|And|Not|Or|Xor|as)\\b)"
   name: keyword.operator.4gl
 # - captures:
@@ -74,14 +76,37 @@ patterns:
     '1':
       name: storage.type.define.4gl
     '2':
-      name: punctuation.definition.variable.4gl
-  match: "(?i:\\b(define) (\\w+)\\b)"
-  name: variable.define.4gl
+      name: variable.define.4gl
+  match: "(?i:\\b(define)\\s+(\\w+)\\b)"
+  name: define.statement.4gl
 - match: "(?i:\\s*\\b(Call|Class|Const|Dim|Redim|Function|Sub|Private Sub|Public Sub|End
     Sub|End Function|End Class|End Property|Public Property|Private Property|Set|Let|Get|New|Randomize|Option
-    Explicit|On Error Resume Next|On Error GoTo|main|end main|returning)\\b\\s*)"
+    Explicit|On Error Resume Next|On Error GoTo|main|end main|returning|case|end
+    case|end foreach|Return)\\b\\s*)"
   name: storage.type.4gl
-
+- captures:
+    '1':
+      name: storage.type.4gl
+    '2':
+      name: storage.type.4gl
+  match: "(?i:\\b(prepare)\\s+\\w+\\s+(from)\\b)"
+  name: prepare.statement.4gl
+- captures:
+    '1':
+      name: storage.type.4gl
+    '2':
+      name: storage.type.4gl
+  match: "(?i:\\b(foreach)\\s+\\w+\\s+(into)\\b)"
+  name: foreach.statement.4gl
+- captures:
+    '1':
+      name: storage.type.4gl
+    '2':
+      name: storage.type.4gl
+    '3':
+      name: storage.type.4gl
+  match: "(?i:\\b(DECLARE)\\s+\\w+\\s+(CURSOR)\\s+(FOR)\\b)"
+  name: cursor.statement.4gl
 - match: "(?i:\\s*\\b(Empty|False|Nothing|Null|True)\\b)"
   name: constant.language.4gl
 - begin: "\""
@@ -121,20 +146,16 @@ patterns:
   name: support.constant.4gl
 # - match: "(?i:\\b(Lock|Unlock|SetAbort|SetComplete|BinaryRead|AddHeader|AppendToLog|BinaryWrite|Clear|End|Flush|Redirect|Write|CreateObject|HTMLEncode|MapPath|URLEncode|Abandon|Convert|Regex)\\b)"
 #   name: support.function.4gl
-- match: "(?i:\\b(startlog|errorlog|length)\\b)"
+- match: "(?i:\\b(startlog|errorlog|length|arg_val)\\b)"
   name: support.function.4gl
 - match: "(?i:\\b(Application_OnEnd|Application_OnStart|OnTransactionAbort|OnTransactionCommit|Session_OnEnd|Session_OnStart)\\b)"
   name: support.function.event.4gl
 # - match: "(?i:(?<=as )(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b))"
 #   name: support.type.vb.4gl
-- match: "(?i:\\b(Array|Add|Asc|Atn|CBool|CByte|CCur|CDate|CDbl|Chr|CInt|CLng|Conversions|Cos|CreateObject|CSng|CStr|Date|DateAdd|DateDiff|DatePart|DateSerial|DateValue|Day|Derived|Math|Escape|Eval|Exists|Exp|Filter|FormatCurrency|FormatDateTime|FormatNumber|FormatPercent|GetLocale|GetObject|GetRef|Hex|Hour|InputBox|InStr|InStrRev|Int|Fix|IsArray|IsDate|IsEmpty|IsNull|IsNumeric|IsObject|Item|Items|Join|Keys|LBound|LCase|Left|Len|LoadPicture|Log|LTrim|RTrim|Trim|Maths|Mid|Minute|Month|MonthName|MsgBox|Now|Oct|Remove|RemoveAll|Replace|RGB|Right|Rnd|Round|ScriptEngine|ScriptEngineBuildVersion|ScriptEngineMajorVersion|ScriptEngineMinorVersion|Second|SetLocale|Sgn|Sin|Space|Split|Sqr|StrComp|String|StrReverse|Tan|Time|Timer|TimeSerial|TimeValue|TypeName|UBound|UCase|Unescape|VarType|Weekday|WeekdayName|Year)\\b)"
-  name: support.function.vb.4gl
 - match: "-?\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f)?\\b"
   name: constant.numeric.4gl
-# - match: "(?i:\\b(vbtrue|vbfalse|vbcr|vbcrlf|vbformfeed|vblf|vbnewline|vbnullchar|vbnullstring|int32|vbtab|vbverticaltab|vbbinarycompare|vbtextcomparevbsunday|vbmonday|vbtuesday|vbwednesday|vbthursday|vbfriday|vbsaturday|vbusesystemdayofweek|vbfirstjan1|vbfirstfourdays|vbfirstfullweek|vbgeneraldate|vblongdate|vbshortdate|vblongtime|vbshorttime|vbobjecterror|vbEmpty|vbNull|vbInteger|vbLong|vbSingle|vbDouble|vbCurrency|vbDate|vbString|vbObject|vbError|vbBoolean|vbVariant|vbDataObject|vbDecimal|vbByte|vbArray)\\b)"
-#   name: support.type.vb.4gl
-- match: "(?i:\\b(char|varchar|decimal|integer|smallint|date|datetime year to second)\\b)"
-  name: support.type.vb.4gl
+- match: "(?i:\\b(char|varchar|decimal|integer|smallint|date|datetime year to second|like)\\b)"
+  name: support.type.4gl
 # - captures:
 #     '1':
 #       name: entity.name.function.4gl
