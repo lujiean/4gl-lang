@@ -72,17 +72,17 @@ patterns:
 #       name: meta.separator.comma.4gl
 #   match: "(?i:(dim)\\s*(?:(\\b[a-zA-Z_x7f-xff][a-zA-Z0-9_x7f-xff]*?\\b)\\s*(,?)))"
 #   name: variable.other.dim.4gl
-- captures:
-    '1':
-      name: storage.type.define.4gl
-    '2':
-      name: variable.define.4gl
-  match: "(?i:\\b(define)\\s+(\\w+)\\b)"
-  name: define.statement.4gl
+# - captures:
+#     '1':
+#       name: storage.type.define.4gl
+#     '2':
+#       name: variable.define.4gl
+#   match: "(?i:\\b(define)\\s+(\\w+)\\b)"
+#   name: define.statement.4gl
 - match: "(?i:\\s*\\b(Call|Class|Const|Dim|Redim|Function|Sub|Private Sub|Public Sub|End
     Sub|End Function|End Class|End Property|Public Property|Private Property|Set|Let|Get|New|Randomize|Option
     Explicit|On Error Resume Next|On Error GoTo|main|end main|returning|case|end
-    case|end foreach|Return)\\b\\s*)"
+    case|end foreach|Return|define)\\b\\s*)"
   name: storage.type.4gl
 - captures:
     '1':
